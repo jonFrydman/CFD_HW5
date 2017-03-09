@@ -1,0 +1,117 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amsfonts,amssymb}
+
+\usepackage{hyperref}  % for urls and hyperlinks
+\usepackage{float}
+
+
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0.3in}
+%\setlength{\evensidemargin}{0in}
+\setlength{\textheight}{9in}
+\setlength{\voffset}{-1in}
+\setlength{\headsep}{26pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+
+
+
+\begin{document}
+
+
+\textbf{Strategies for what we need to do:}\\
+\begin{itemize}
+    \item Define Global Variables
+    \item Import Grid
+    \item Perform Space Discretization
+    \begin{itemize}
+        \item Calculate Cell Mid-Points
+        
+        $$ \underline{x}_{ij} = \frac 1 4 \left( \underline{x}_A + \underline{x}_B + \underline{x}_C + \underline{x}_D \right) $$
+        
+        \item Compute Cell Areas
+        
+        $$ \Omega_{ij} = \Omega_{ABCD} = \frac 1 2 \left| \underline{x}_{AC} \times \underline{x}_{BD} \right| $$
+        
+        \item Calculate Normals
+        
+        $$ \Delta s_{i+1/2, j} = \Delta s_{AB} = \Delta y_{AB}\underline{e}_x - \Delta x_{AB}\underline{e}_y = \left( y_B - y_A \right)\underline{e}_x - \left( x_B - x_A \right)\underline{e}_y $$
+        
+    \end{itemize}
+    \item Prescribe Initial Conditions
+    \begin{itemize}
+        \item Based on Freestream conditions throughout
+        \item $M_{\infty} = 0.85$
+    \end{itemize}
+    \item Impose Boundary Conditions
+    \begin{itemize}
+        \item \textit{This will be covered in lecture 14 on 3/2/17}
+    \end{itemize}
+    \item Define the equations for Jameson Scheme
+    \begin{enumerate}
+        \item Residual Equation:
+        $$ R_{ij} = \sum_{Faces} F^{*^{AV}}\cdot \Delta\underline{s} $$
+        \item Numerical Flux Equation:
+        $$ F^{*^{AV}} = F^* - D $$
+        \item Artificial Viscosity:
+        $$ F^{*^{AV}}_{i+1/2} = F^{*}_{i+1/2} - d_{i+1/2} $$
+        $$ F^{*}_{i+1/2} = \frac 1 2 (F_i + F_{i+1} ) $$
+        $$ d_{i+1/2} = \epsilon^{(2)}_{i+1/2}\left(U_{i+1} - U_i \right) - \epsilon^{(4)}_{i+1/2}\left(U_{i+2} - 3U_{i+1}+3 U_i - U_{i-1} \right) $$
+        $$ \epsilon^{(2)}_{i+1/2} = \frac{1}{2} \left( \epsilon^{(2)}_{i}+ \epsilon^{(2)}_{i+1} \right)\text{ or } \max\left( \epsilon^{(2)}_{i}, \epsilon^{(2)}_{i+1} \right)$$
+        $$ \epsilon^{(2)}_{i} = \alpha^{(2)}\left( |u| + c \right)_i \frac{| P_{i+1} - 2P_i+ P_{i+1} |}{P_{i+1} + 2P_i+ P_{i+1}}$$
+        $$ \epsilon^{(4)}_{i+1/2} = \max\left[ 0, \left( \alpha^{(4)} - \frac{\epsilon^{(2)}_{i+1}}{\left( |u| + c \right)_{i+1/2}} \right) \right] $$
+        $$\alpha^{(2)} = 1/4 \quad \quad \alpha^{(4)} = 1/256 $$
+    \end{enumerate}
+    \item Time Integration Through R-K4
+    $$ U_{ij}^{(1)} = U_{ij}^n - \tau_{ij}\alpha_1 R^n_{ij} $$
+    $$ U_{ij}^{(2)} = U_{ij}^n - \tau_{ij}\alpha_2 R^{(1)}_{ij} $$
+    $$ U_{ij}^{(3)} = U_{ij}^n - \tau_{ij}\alpha_3 R^{(2)}_{ij} $$
+    $$ U_{ij}^{n+1} = U_{ij}^{(4)} = U_{ij}^n - \tau_{ij}\alpha_4 R^{(3)}_{ij} $$
+    
+    $$ R_{ij}^{(1)} = \sum_{Faces} \left[ F^{*^{(AV)}}\left(U^{(1)}\right) \cdot \Delta\underline{s} \right] $$
+    
+    $$ \alpha_1 = 1/4 \quad \quad \alpha_2 = 1/3 \quad \quad \alpha_3 = 1/2 \quad \quad \alpha_4 = 1 $$
+    
+    $$ \tau_{ij} = \frac{\Delta t_{ij}}{\Omega_{ij}} \leq \frac{CFL}{|(\underline{u}+c)_{ij} \cdot \Delta\underline{s}_i | + |(\underline{u}+c)_{ij} \cdot \Delta\underline{s}_j|} $$
+    
+    $$ \Delta\underline{s}_i = \frac 1 2 \left( \Delta\underline{s}_{i+1/2,j} \pm \Delta\underline{s}_{i-1/2,j} \right) $$
+    
+    $$ \Delta\underline{s}_j = \frac 1 2 \left( \Delta\underline{s}_{i,j+1/2} \pm \Delta\underline{s}_{i,j-1/2} \right) $$
+    
+\end{itemize}
+
+\textbf{Let's figure out how we do CFL number.}
+
+
+\newpage
+
+\underline{Problem Statement:}\\
+Solve numerically the 2D Euler equations for the transonic flow over a NACA 0012 airfoil using the Jameson scheme (Jameson et al., AIAA 1981).\\
+Use the following conditions in your computations:
+
+\begin{itemize}
+    \item angle of attack $\alpha = 0$ deg;
+    \item free-stream Mach number $M_{\infty} = 0.85$.
+\end{itemize}
+
+In summary do the following:
+\begin{enumerate}
+    \item Write a computer program (and on paper the numerical algorithm) to solve the 2D Euler equations using Jameson scheme.
+    \begin{enumerate}
+        \item Read the computational grid coordinates generated in HW\#3
+        \item Prescribe the ICs
+        \item Impose the BCs
+        \item Solve the 2D Euler equations using Jameson scheme
+        \item Run the code until reaching the steady state, i.e. the residual is smaller than a prescribed small tolerance
+    \end{enumerate}
+    \item Plot the steady-state numerical solution with 2D color contours around the airfoils of velocity magnitude, pressure, Mach number, total enthalpy, and entropy, and the pressure coefficient
+    $$ C_p = \frac{p-p_\infty}{\frac{1}{2} \rho_\infty U_\infty^2}$$
+    along the airfoil surface (6 figures total).
+    \item Discuss the results.
+\end{enumerate}
+
+
+
+\end{document}
