@@ -43,6 +43,8 @@ vector<double> SouthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, 
 }
 
 vector<double> JamesonViscocity(grid &grd, vector< vector<cellState> > &cellset,int i, int j) {
+    double alpha2=1.0/4;
+    double alpha4=1.0/256;
 	//find max of (nu(i-1), nu(i), nu(i+1), nu(i+2))
 	double nu_max = 0.0;
 	double nu_test;

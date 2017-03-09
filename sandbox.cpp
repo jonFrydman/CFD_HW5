@@ -35,7 +35,7 @@ int main(){
 
     cout << "Expected %P rise at front of airfoil:\t"<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
 
-    vector<double> test = EastFlux(grd, cellset, 5,5);
+    vector<double> test = EastFlux(grd, cellset, 10,10);
     cout<<"F*(AV)1:\t" << test[0] << "\t\tF*(AV)2:\t" << test[1] << "\t\tF*(AV)3:\t" << test[2] << "\t\tF*(AV)4:\t" << test[3];
 }
 
@@ -43,7 +43,6 @@ void loadICs(){
     cellset.resize(grd.N-1, std::vector<cellState>(grd.M-1));
     for(int i=0; i<grd.N-1;i++){
         for(int j=0; j<grd.M-1;j++){
-            //cellset[i][j].redefine(rho_ref,rho_ref*M_ref*c_ref,0,rhoE_ref,gamma,cv,i,j);
             cellset[i][j].redefine(rho_ref,rho_ref*M_ref*c_ref,0,rhoE_ref,gamma,cv,i,j);
         }
     }

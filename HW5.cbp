@@ -25,6 +25,8 @@
 		</Unit>
 		<Unit filename="include/cellState.h" />
 		<Unit filename="include/grid.h" />
+		<Unit filename="include/numericalFlux.h" />
+		<Unit filename="numericalFlux.cpp" />
 		<Unit filename="referenceParameters.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

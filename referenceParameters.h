@@ -22,6 +22,7 @@ double rhoE_ref=P_ref/(gamma-1)+0.5*rho_ref*pow(M_ref*c_ref,2); //internal energ
 double H_ref=(rhoE_ref+P_ref)/rho_ref;
 double speed_ref=M_ref*c_ref;
 
-
+double alpha2=1.0/4;
+double alpha4=1.0/256;
 
 #endif // REFERENCEPARAMETERS_H_INCLUDED
