@@ -18,6 +18,7 @@ class grid{
             defineSideLengths();
             defineSideNormals();
             defineAreas();
+            defineIJNormals();
         }
         vec2D xCorner, yCorner, xCenter, yCenter;
         vec2D xSside, ySside, xWside, yWside;

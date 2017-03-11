@@ -44,12 +44,14 @@ int main(){
     for (int t=0 ; t<100; t++){
 
         cout << "Time Step:\t"<< t << "\t";
-        cout << "Cell Velocity: <"<<cellset[10][10].U() <<", "<<cellset[10][10].V()<<">\tPressure: "<<cellset[10][10].P()<<"\tCell Tau: "<< Tau(grd,cellset,10,10,CFL)<<"\t";
+        cout << "Cell Velocity: <"<<cellset[10][10].U() <<", "<<cellset[10][10].V()<<">\tPressure: "<<cellset[10][10].P();
+        cout<<"\tCell Tau: "<< Tau(grd,cellset,10,10,CFL)<<"\t";
         cout<<"\t" << "Energy: "<<cellset[10][10].rhoE()<<"\t" << "Entropy: "<< cellset[10][10].S() << "\t" << "Temp: " << cellset[10][10].T() << "\t" << "Enthalpy: " << cellset[10][10].H()<<"\t"
         <<"Expected %P rise at front of airfoil: "<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
         cout << endl;
 
         cellset = RK4(grd, cellset, CFL);
+        system("pause");
     }
 }
 

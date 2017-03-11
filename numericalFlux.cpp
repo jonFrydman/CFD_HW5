@@ -224,12 +224,9 @@ vector<double> Residuals(grid &grd, vector< vector<cellState> > &cellset,int i, 
 }
 
 double Tau(grid &grd, vector< vector<cellState> > &cellset, int i, int j, double CFL){
-
-double denominatorI = (cellset[i][j].U()+cellset[i][j].C())*grd.xInorm[i][j] + (cellset[i][j].V()+cellset[i][j].C())*grd.yInorm[i][j];
-double denominatorJ = (cellset[i][j].U()+cellset[i][j].C())*grd.xJnorm[i][j] + (cellset[i][j].V()+cellset[i][j].C())*grd.yJnorm[i][j];
-
-return CFL*grd.area[i][j]/(abs(denominatorI)+abs(denominatorJ)); // ------------- Consider making Tau 0.75 of this if it matters
-
+    double denominatorI = (cellset[i][j].U()+cellset[i][j].C())*grd.xInorm[i][j] + (cellset[i][j].V()+cellset[i][j].C())*grd.yInorm[i][j];
+    double denominatorJ = (cellset[i][j].U()+cellset[i][j].C())*grd.xJnorm[i][j] + (cellset[i][j].V()+cellset[i][j].C())*grd.yJnorm[i][j];
+    return CFL*grd.area[i][j]/(abs(denominatorI)+abs(denominatorJ)); // ------------- Consider making Tau 0.75 of this if it matters
 }
 
 vector<double> AlphaRK(){
