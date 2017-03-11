@@ -39,6 +39,7 @@ int main(){
     cout<<"\t\tF*(AV)1:\t" << test[0] << endl << "\t\tF*(AV)2:\t" << test[1]<< endl  << "\t\tF*(AV)3:\t" << test[2]<< endl << "\t\tF*(AV)4:\t" << test[3]<< endl;
 
 
+return 0;
 }
 
 void loadICs(){
