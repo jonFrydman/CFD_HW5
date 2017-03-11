@@ -36,10 +36,8 @@ int main(){
     cout << "Expected %P rise at front of airfoil:\t"<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
 
     vector<double> test = EastFlux(grd, cellset, 10,10);
-    cout<<"F*(AV)1:\t" << test[0] << endl << "\t\tF*(AV)2:\t" << test[1]<< endl  << "\t\tF*(AV)3:\t" << test[2]<< endl << "\t\tF*(AV)4:\t" << test[3]<< endl;
+    cout<<"\t\tF*(AV)1:\t" << test[0] << endl << "\t\tF*(AV)2:\t" << test[1]<< endl  << "\t\tF*(AV)3:\t" << test[2]<< endl << "\t\tF*(AV)4:\t" << test[3]<< endl;
 
-cellState test2 = cellset[10][10];
-cout<< '15'; //test2.P() <<'  '<< cellset[10][10].P();
 
 }
 

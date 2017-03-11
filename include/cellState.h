@@ -119,7 +119,7 @@ class cellState{
 
         //Following this guide on assignment operators overloading: https://www.tutorialspoint.com/cplusplus/assignment_operators_overloading.htm
 
-        void operator = (const cellState &C ) {
+        void operator = (const cellState &C ) { //Verified to work - Mike 3_10
             cell_rho=C.cell_rho;
             cell_rhoU=C.cell_rhoU;
             cell_rhoV=C.cell_rhoV;

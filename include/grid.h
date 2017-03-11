@@ -22,6 +22,7 @@ class grid{
         vec2D xCorner, yCorner, xCenter, yCenter;
         vec2D xSside, ySside, xWside, yWside;
         vec2D xSnorm, ySnorm, xWnorm, yWnorm;
+        vec2D xInorm, yInorm, xJnorm, yJnorm; //the centered, averaged normals
         vec2D area;
         int N, M; //number of points in the xi, and eta directions
     private:
@@ -107,12 +108,25 @@ class grid{
             yWnorm.resize(N-1, std::vector<double>(M-1));
             for(int i=0; i<N-1; i++){
                 for(int j=0; j<M-1; j++){
-                    double Slength=sqrt(pow(xSside[i][j],2)+pow(ySside[i][j],2));
-                    double Wlength=sqrt(pow(xWside[i][j],2)+pow(yWside[i][j],2));
-                    ySnorm[i][j]=-(xCorner[i+1][j]-xCorner[i][j])/Slength;
-                    xSnorm[i][j]=(yCorner[i+1][j]-yCorner[i][j])/Slength;
-                    yWnorm[i][j]=(xCorner[i][j+1]-xCorner[i][j])/Wlength;
-                    xWnorm[i][j]=-(yCorner[i][j+1]-yCorner[i][j])/Wlength;
+                    ySnorm[i][j]=-(xCorner[i+1][j]-xCorner[i][j]);
+                    xSnorm[i][j]=(yCorner[i+1][j]-yCorner[i][j]);
+                    yWnorm[i][j]=(xCorner[i][j+1]-xCorner[i][j]);
+                    xWnorm[i][j]=-(yCorner[i][j+1]-yCorner[i][j]);
+                }
+            }
+        }
+
+        void defineIJNormals(){
+            xInorm.resize(N-1, std::vector<double>(M-1));
+            yInorm.resize(N-1, std::vector<double>(M-1));
+            xJnorm.resize(N-1, std::vector<double>(M-1));
+            yJnorm.resize(N-1, std::vector<double>(M-1));
+            for(int i=0; i<N-1; i++){
+                for(int j=0; j<M-1; j++){
+                    xInorm[i][j]=0.5*(xWnorm[i][j]+xWnorm[i+1][j]);
+                    yInorm[i][j]=0.5*(yWnorm[i][j]+yWnorm[i+1][j]);
+                    xJnorm[i][j]=0.5*(xSnorm[i][j]+xSnorm[i][j+1]);
+                    yJnorm[i][j]=0.5*(ySnorm[i][j]+ySnorm[i][j+1]);
                 }
             }
         }
