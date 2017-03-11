@@ -14,7 +14,7 @@ vector<double> WestFlux(grid &grd, vector< vector<cellState> > &cellset,int i, i
 vector<double> NorthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
 vector<double> SouthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
 
-double nu(vector< vector<cellState> > &cellset,int i, int j, int k, int i_ctrl, j_ctrl);
+double nu(vector< vector<cellState> > &cellset,int i, int j, int k, int i_ctrl, int j_ctrl);
 vector<double> GenericJamesonViscosity(grid &grd, vector< vector<cellState> > &cellset,int i, int j, int i_ctrl, int j_ctrl);
 vector<double> NorthJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
 vector<double> SouthJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j);

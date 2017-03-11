@@ -51,7 +51,7 @@ vector<double> SouthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, 
     return GenericFlux(grd, cellset, i, j, 0, -1);
 }
 
-double nu(vector< vector<cellState> > &cellset,int i, int j, int k, int i_ctrl, j_ctrl){
+double nu(vector< vector<cellState> > &cellset,int i, int j, int k, int i_ctrl, int j_ctrl){
 
 double a = cellset[i + k*i_ctrl + 1*i_ctrl][j + k*j_ctrl + 1*j_ctrl].P();
 double b = cellset[i + k*i_ctrl][j + k*j_ctrl].P();
