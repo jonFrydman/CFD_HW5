@@ -8,15 +8,6 @@
 
 using namespace std;
 
-double alphaRK1 = 1.0/8;
-double alphaRK2 = 0.306;
-double alphaRK3 = 0.587;
-double alphaRK4 = 1.0;
-
-double alpha2 = 1.0/4;
-double alpha4 = 1.0/256;
-double CFL = 2.8;
-
 vector<double> GenericFlux(grid &grd, vector< vector<cellState> > &cellset, int i, int j, int delta_i, int delta_j);
 vector<double> EastFlux(grid &grd, vector< vector<cellState> > &cellset, int i, int j);
 vector<double> WestFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
