@@ -30,21 +30,21 @@ int main(){
 //    }
     loadICs();
 
- for (int t=0;t<3;t++){
 
-    cout << "Time Step:\t"<< t << endl;
-    cout << "Cell Velocity:\t<"<<cellset[10][10].U()<<", "<<cellset[10][10].V()<<">\t\tPressure:\t"<<cellset[10][10].P()<<"\n";
-    cout << "Energy:\t"<<cellset[10][10].rhoE()<<"\n";
-    cout << "P_ref:\t"<<P_ref<<"\t\trhoE_ref:\t"<<rhoE_ref<<"\t\trhoU_ref:\t"<<rho_ref*speed_ref<<"\n";
+	cout << "Please make the console full screen"<<endl;
+	system("pause");
 
-    cout << "Expected %P rise at front of airfoil:\t"<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
+ for (int t=0 ; t<100; t++){
 
-    vector<double> test = EastFlux(grd, cellset, 10,10);
-    cout<<"\t\tF*(AV)1:\t" << test[0] << endl << "\t\tF*(AV)2:\t" << test[1]<< endl  << "\t\tF*(AV)3:\t" << test[2]<< endl << "\t\tF*(AV)4:\t" << test[3]<< endl;
+    cout << "Time Step:\t"<< t << "\t";
+    cout << "Cell Velocity: <"<<cellset[10][10].U() <<", "<<cellset[10][10].V()<<">\tPressure: "<<cellset[10][10].P()<<"\tCell Tau: "<< Tau(grd,cellset,10,10)<<"\t";
+    cout<<"\t" << "Energy: "<<cellset[10][10].rhoE()<<"\t" << "Entropy: "<< cellset[10][10].S() << "\t" << "Temp: " << cellset[10][10].T() << "\t" << "Enthalpy: " << cellset[10][10].H()<<"\t"
+    <<"Expected %P rise at front of airfoil: "<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
+	cout << endl;
 
-    system("pause");
+	cellset = RK4(grd, cellset);
 
-    RK4(grd, cellset);
+
 }
 
 return 0;

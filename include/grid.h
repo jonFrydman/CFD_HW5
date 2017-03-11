@@ -1,6 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 #include <fstream>
+#include <string>
 #include <cstdlib>
 #include <algorithm>
 #include <vector>
@@ -17,6 +18,7 @@ class grid{
             defineCenterPoints();
             defineSideLengths();
             defineSideNormals();
+			defineIJNormals();
             defineAreas();
         }
         vec2D xCorner, yCorner, xCenter, yCenter;
@@ -121,14 +123,31 @@ class grid{
             yInorm.resize(N-1, std::vector<double>(M-1));
             xJnorm.resize(N-1, std::vector<double>(M-1));
             yJnorm.resize(N-1, std::vector<double>(M-1));
-            for(int i=0; i<N-1; i++){
-                for(int j=0; j<M-1; j++){
+            for(int i=0; i<N-2; i++){
+                for(int j=0; j<M-2; j++){
                     xInorm[i][j]=0.5*(xWnorm[i][j]+xWnorm[i+1][j]);
                     yInorm[i][j]=0.5*(yWnorm[i][j]+yWnorm[i+1][j]);
                     xJnorm[i][j]=0.5*(xSnorm[i][j]+xSnorm[i][j+1]);
                     yJnorm[i][j]=0.5*(ySnorm[i][j]+ySnorm[i][j+1]);
                 }
             }
+
+			//To get the boundary values for these s's, Snorm must be found at the extreme adge
+/*			for (int i = 0; i < N - 1; i++) {
+
+				xInorm[i][M-1] = 0.5*(xWnorm[i][j] + xWnorm[i + 1][j]);
+				yInorm[i][j] = 0.5*(yWnorm[i][j] + yWnorm[i + 1][j]);
+				xJnorm[i][j] = 0.5*(xSnorm[i][j] + xSnorm[i][j + 1]);
+				yJnorm[i][j] = 0.5*(ySnorm[i][j] + ySnorm[i][j + 1]);
+
+			}
+
+			for (int j = 0; j < M - 1; j++) {
+		
+				
+
+				}
+			}*/
         }
 };
 

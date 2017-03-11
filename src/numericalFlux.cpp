@@ -2,7 +2,7 @@
 #include "grid.h"
 #include <vector>
 #include <cmath>
-#include "numericalFlux.h"
+#include "numericalFlux.h""
 
 using namespace std;
 
@@ -197,7 +197,7 @@ vector<double> Residuals(grid &grd, vector< vector<cellState> > &cellset,int i, 
     std::vector<double> WFAV(4, 0.0);
 
     NFAV = NorthFlux_AV(grd,cellset,i,j);
-    SFAV = SouthFlux_AV(grd,cellset,i,j);
+    SFAV = SouthFlux(grd,cellset,i,j);
     EFAV = EastFlux_AV(grd,cellset,i,j) ;
     WFAV = WestFlux_AV(grd,cellset,i,j);
 
@@ -221,7 +221,7 @@ return CFL*grd.area[i][j]/(abs(denominatorI)+abs(denominatorJ)); // ------------
 
 vector<double> AlphaRK(){
 
-    vector<double> Alpha(4,0.0);
+    vector<double> Alpha;
 
     Alpha.push_back(alphaRK1);
     Alpha.push_back(alphaRK2);
@@ -237,20 +237,22 @@ vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset)
 
     std::vector<double> U_temp(4, 0.0);
     std::vector<double> RESIDUALS(4, 0.0);
-    vector< vector<cellState> > cellsetPlus(grd.N-1, std::vector<cellState>(grd.M-1));
-    vector<double> alphaRK = AlphaRK();
+    vector< vector<cellState> > cellsetPlus = cellset;
+	vector< vector<cellState> > cellsetPrev(grd.N - 1, std::vector<cellState>(grd.M - 1));
+     vector<double> alphaRK = AlphaRK();
 
-    for(int i=0+2; i<grd.N-1-2; i++)
+	 //loop through the whole thing 4 times! Nk*Ni*Nj, this way each pseudo timestep residual (R1,R2, etc) is based on fluxes from neighbors on that pseudotime. Otherwise there is the inclusion of fluxes that are old since Fstar is 1/2(fi + fi+1).
+	 for (int k = 0; k<4; k++)
+	 {
+
+		 cellsetPrev = cellsetPlus;
+
+	 for(int i=0+5; i<grd.N-1-5; i++)
     {
-        for(int j=0+2; j<grd.M-1-2; j++)
+        for(int j=0+5; j<grd.M-1-5; j++)
         {
 
-            cellsetPlus[i][j] = cellset[i][j];
-
-            for (int k=0; k<4; k++)
-            {
-
-                RESIDUALS = Residuals(grd, cellsetPlus, i, j);
+                RESIDUALS = Residuals(grd, cellsetPrev, i, j);
 
                 U_temp[0] = cellset[i][j].rho() - Tau(grd,cellset,i,j) * alphaRK[k] * RESIDUALS[0];
                 U_temp[1] = cellset[i][j].rhoU() - Tau(grd,cellset,i,j) * alphaRK[k] * RESIDUALS[1];
@@ -262,6 +264,8 @@ vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset)
             }
 
         }
+
+
 
     }
 
