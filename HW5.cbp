@@ -31,8 +31,6 @@
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="sandbox.cpp" />
-		<Unit filename="src/cellState.cpp" />
-		<Unit filename="src/grid.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
