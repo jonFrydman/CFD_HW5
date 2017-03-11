@@ -2,7 +2,7 @@
 #include "grid.h"
 #include <vector>
 #include <cmath>
-#include <numericalFlux.h>
+#include "numericalFlux.h"
 
 using namespace std;
 
@@ -123,7 +123,7 @@ return GenericJamesonViscosity(grd, cellset, i, j, 0, 1);
 };
 vector<double> SouthJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j) {
 
-    return GenericJamesonViscosity(grd, cellset, i - 1, j, 0, 1);
+    return GenericJamesonViscosity(grd, cellset, i, j - 1, 0, 1);
 
 };
 
@@ -197,7 +197,7 @@ vector<double> Residuals(grid &grd, vector< vector<cellState> > &cellset,int i, 
     std::vector<double> WFAV(4, 0.0);
 
     NFAV = NorthFlux_AV(grd,cellset,i,j);
-    SFAV = SouthFlux(grd,cellset,i,j);
+    SFAV = SouthFlux_AV(grd,cellset,i,j);
     EFAV = EastFlux_AV(grd,cellset,i,j) ;
     WFAV = WestFlux_AV(grd,cellset,i,j);
 
@@ -240,9 +240,9 @@ vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset)
     vector< vector<cellState> > cellsetPlus(grd.N-1, std::vector<cellState>(grd.M-1));
     vector<double> alphaRK = AlphaRK();
 
-    for(int i=0; i<grd.N-1; i++)
+    for(int i=0+2; i<grd.N-1-2; i++)
     {
-        for(int j=0; j<grd.M-1; j++)
+        for(int j=0+2; j<grd.M-1-2; j++)
         {
 
             cellsetPlus[i][j] = cellset[i][j];

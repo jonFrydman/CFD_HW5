@@ -79,11 +79,11 @@
 1489203412 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\referenceparameters.h
 	<math.h>
 
-1489210342 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\cellstate.h
+1489217493 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\cellstate.h
 	<math.h>
 	<grid.h>
 
-1489200063 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\grid.h
+1489222829 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\grid.h
 	<fstream>
 	<cstdlib>
 	<algorithm>
@@ -91,7 +91,7 @@
 	<cmath>
 	<iostream>
 
-1489210940 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\numericalflux.h
+1489223248 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\numericalflux.h
 	"cellState.h"
 	"grid.h"
 	<vector>
@@ -107,14 +107,14 @@
 	<cmath>
 	<numericalFlux.h>
 
-1489208303 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\numericalflux.cpp
+1489224236 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\numericalflux.cpp
 	"cellState.h"
 	"grid.h"
 	<vector>
 	<cmath>
-	<numericalFlux.h>
+	"numericalFlux.h"
 
-1489209186 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp
+1489224315 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp
 	<iostream>
 	<fstream>
 	"referenceParameters.h"
@@ -122,6 +122,6 @@
 	"grid.h"
 	"numericalFlux.h"
 
-1489203412 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\referenceparameters.h
+1489217493 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\referenceparameters.h
 	<math.h>
 

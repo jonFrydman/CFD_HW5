@@ -30,7 +30,7 @@ int main(){
 //    }
     loadICs();
 
- for (int t;t<10;t++){
+ for (int t=0;t<3;t++){
 
     cout << "Time Step:\t"<< t << endl;
     cout << "Cell Velocity:\t<"<<cellset[10][10].U()<<", "<<cellset[10][10].V()<<">\t\tPressure:\t"<<cellset[10][10].P()<<"\n";
@@ -44,7 +44,7 @@ int main(){
 
     system("pause");
 
-
+    RK4(grd, cellset);
 }
 
 return 0;
