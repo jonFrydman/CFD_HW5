@@ -37,7 +37,6 @@ vector<double> WestFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i
 vector<double> Residuals(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
 
 vector<double> AlphaRK();
-
 double Tau(grid &grd, vector< vector<cellState> > &cellset, int i, int j);
 
 vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset);

@@ -20,17 +20,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="eulerFluxRelations.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Unit filename="include/cellState.h" />
+		<Unit filename="include/eulerFluxRelations.h" />
 		<Unit filename="include/grid.h" />
 		<Unit filename="include/numericalFlux.h" />
-		<Unit filename="numericalFlux.cpp" />
-		<Unit filename="referenceParameters.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="sandbox.cpp" />
+		<Unit filename="include/referenceParameters.h" />
+		<Unit filename="src/numericalFlux.cpp" />
+		<Unit filename="src/sandbox.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
