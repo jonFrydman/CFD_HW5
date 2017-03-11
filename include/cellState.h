@@ -116,6 +116,19 @@ class cellState{
             cell_rhoV=c;
             cell_rhoE=d;
         }
+
+        //Following this guide on assignment operators overloading: https://www.tutorialspoint.com/cplusplus/assignment_operators_overloading.htm
+
+        void operator = (const cellState &C ) {
+            cell_rho=C.cell_rho;
+            cell_rhoU=C.cell_rhoU;
+            cell_rhoV=C.cell_rhoV;
+            cell_rhoE=C.cell_rhoE;
+            cell_gamma=C.cell_gamma;
+            cell_cv=C.cell_cv;
+            xi=C.xi;
+            eta=C.eta;
+      }
         //grid based functions
 };
 

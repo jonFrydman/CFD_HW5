@@ -81,6 +81,73 @@ vector<double> JamesonViscocity(grid &grd, vector< vector<cellState> > &cellset,
 	D_AV[3] = epsilon2*(cellset[i + 1][j].rhoE() - cellset[i][j].rhoE()) - epsilon4*(cellset[i + 2][j].rhoE() - 3 * cellset[i + 1][j].rhoE() + 3 * cellset[i][j].rhoE() - cellset[i - 1][j].rhoE());
 	return D_AV;
 }
+//
+//vector<double> EastFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
+//    return EastFlux(grd,cellset,i,j) - EastJamVisc(grd, cellset,i,j);
+//}
+//
+//vector<double> WestFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
+//    return WestFlux(grd,cellset,i,j) - WestJamVisc(grd, cellset,i,j);
+//}
+//
+//vector<double> NorthFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
+//    return NorthFlux(grd,cellset,i,j) - NorthJamVisc(grd, cellset,i,j);
+//}
+//
+//vector<double> SouthFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
+//    return SouthFlux(grd,cellset,i,j) - SouthJamVisc(grd, cellset,i,j);
+//}
+//
+//
+//vector<double> Residuals(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
+//
+//    std::vector<double> RESIDUALS(4, 0.0);
+//    std::vector<double> NFAV(4, 0.0);
+//    std::vector<double> SFAV(4, 0.0);
+//    std::vector<double> EFAV(4, 0.0);
+//    std::vector<double> WFAV(4, 0.0);
+//
+//    NFAV = NorthFlux_AV(grd,cellset,i,j);
+//    SFAV = SouthFlux(grd,cellset,i,j);
+//    EFAV = EastFlux_AV(grd,cellset,i,j) ;
+//    WFAV = WestFlux_AV(grd,cellset,i,j);
+//
+//    RESIDUALS[0] = NFAV[0] + SFAV[0] + EFAV[0] + WFAV[0];
+//    RESIDUALS[1] = NFAV[1] + SFAV[1] + EFAV[1] + WFAV[1];
+//    RESIDUALS[2] = NFAV[2] + SFAV[2] + EFAV[2] + WFAV[2];
+//    RESIDUALS[3] = NFAV[3] + SFAV[3] + EFAV[3] + WFAV[3];
+//
+//    return RESIDUALS;
+//
+//}
+//
+////Define AlphaRK, Define Tau, Is there a way to do what I am trying to do with TempCell = CellSet?
+//
+//vector<double> RK4(grid &grd, vector< vector<cellState> > &cellset,double Tau,vector<double> AlphaRK,int i, int j){
+//
+//    std::vector<double> U_temp(4, 0.0);
+//    std::vector<double> RESIDUALS(4, 0.0);
+//
+//    cellState TempCell() = cellset[i][j];
+//
+//    for (k=0;k<4;k++){
+//
+//    RESIDUALS = Residuals(grd, TempCell, i, j)
+//
+//    U_temp[0] = cellset[i][j].rho()-Tau*AlphaRK[k]*RESIDUALS[0];
+//    U_temp[1] = cellset[i][j].rhoU()-Tau*AlphaRK[k]*RESIDUALS[1];
+//    U_temp[2] = cellset[i][j].rhoV()-Tau*AlphaRK[k]*RESIDUALS[2];
+//    U_temp[3] = cellset[i][j].rhoE()-Tau*AlphaRK[k]*RESIDUALS[3];
+//
+//    TempCell = cellState(U_temp[0], U_temp[1], U_temp[2], U_temp[3], cellset[i][j].gamma(), cellset[i][j].cv());
+//
+//    }
+//
+//    cellState Uplus() = TempCell;
+//
+//    return TempCell;
+//
+//}
 
 //void IFT_IICD(int index, double dX, double dT, std::vector<double> & uT, std::vector<double> & uTplus);
 //void IBT_2CD_I(int Xelements, std::vector<double>& CoefficientMinus, std::vector<double>& CoefficientPlus, std::vector<double>& Coefficient, std::vector<double>& Uplus, std::vector<double>& U);
