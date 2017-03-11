@@ -22,6 +22,7 @@ class grid{
         vec2D xCorner, yCorner, xCenter, yCenter;
         vec2D xSside, ySside, xWside, yWside;
         vec2D xSnorm, ySnorm, xWnorm, yWnorm;
+        vec2D xInorm, yInorm, xJnorm, yJnorm; //the centered, averaged normals
         vec2D area;
         int N, M; //number of points in the xi, and eta directions
     private:
@@ -115,6 +116,29 @@ class grid{
                     xWnorm[i][j]=-(yCorner[i][j+1]-yCorner[i][j])/Wlength;
                 }
             }
+        }
+        void defineIJNormals(){
+            xInorm.resize(N-1, std::vector<double>(M-1));
+            yInorm.resize(N-1, std::vector<double>(M-1));
+            xJnorm.resize(N-1, std::vector<double>(M-1));
+            yJnorm.resize(N-1, std::vector<double>(M-1));
+            for(int i=0; i<N-2; i++){
+                for(int j=0; j<M-2; j++){
+                    xInorm[i][j]=0.5*(xWnorm[i][j]+xWnorm[i+1][j]);
+                    yInorm[i][j]=0.5*(yWnorm[i][j]+yWnorm[i+1][j]);
+                    xJnorm[i][j]=0.5*(xSnorm[i][j]+xSnorm[i][j+1]);
+                    yJnorm[i][j]=0.5*(ySnorm[i][j]+ySnorm[i][j+1]);
+                }
+            }
+			//To get the boundary values for these s's, Snorm must be found at the extreme adge
+/*			for (int i = 0; i < N - 1; i++) {
+
+				xInorm[i][M-1] = 0.5*(xWnorm[i][j] + xWnorm[i + 1][j]);
+				yInorm[i][j] = 0.5*(yWnorm[i][j] + yWnorm[i + 1][j]);
+				xJnorm[i][j] = 0.5*(xSnorm[i][j] + xSnorm[i][j + 1]);
+				yJnorm[i][j] = 0.5*(ySnorm[i][j] + ySnorm[i][j + 1]);
+
+			}*/
         }
 };
 

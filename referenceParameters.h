@@ -4,6 +4,7 @@
 #include<math.h>
 //Problem Parameters
 double M_ref=0.8;
+double CFL=2.4;
 
 //Air Properties at STP
 double R=8314./28.966; // air gas constant J/Kg-K

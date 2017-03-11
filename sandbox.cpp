@@ -29,14 +29,28 @@ int main(){
 //        cout<<"\t\tCell Area:\t"<<grd.area[i][0]<<"\t\tAspect Ratio:\t"<<grd.xSside[i][0]/grd.xWside[i][0]<<"\t\tOrthogonality:\t"<<cos(grd.xWside[i][0]/grd.xSside[i][0])*180/pi<<" deg\n\n";
 //    }
     loadICs();
-    cout << "Cell Velocity:\t<"<<cellset[10][10].U()<<", "<<cellset[10][10].V()<<">\t\tPressure:\t"<<cellset[10][10].P()<<"\n";
-    cout << "Engergy:\t"<<cellset[10][10].rhoE()<<"\n";
-    cout << "P_ref:\t"<<P_ref<<"\t\trhoE_ref:\t"<<rhoE_ref<<"\t\trhoU_ref:\t"<<rho_ref*speed_ref<<"\n";
+//    cout << "Cell Velocity:\t<"<<cellset[10][10].U()<<", "<<cellset[10][10].V()<<">\t\tPressure:\t"<<cellset[10][10].P()<<"\n";
+//    cout << "Engergy:\t"<<cellset[10][10].rhoE()<<"\n";
+//    cout << "P_ref:\t"<<P_ref<<"\t\trhoE_ref:\t"<<rhoE_ref<<"\t\trhoU_ref:\t"<<rho_ref*speed_ref<<"\n";
+//
+//    cout << "Expected %P rise at front of airfoil:\t"<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
+//
+//    vector<double> test = EastFlux(grd, cellset, 10,10);
+//    cout<<"F*(AV)1:\t" << test[0] << "\t\tF*(AV)2:\t" << test[1] << "\t\tF*(AV)3:\t" << test[2] << "\t\tF*(AV)4:\t" << test[3];
 
-    cout << "Expected %P rise at front of airfoil:\t"<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
+	cout << "Please make the console full screen"<<endl;
+	system("pause");
 
-    vector<double> test = EastFlux(grd, cellset, 10,10);
-    cout<<"F*(AV)1:\t" << test[0] << "\t\tF*(AV)2:\t" << test[1] << "\t\tF*(AV)3:\t" << test[2] << "\t\tF*(AV)4:\t" << test[3];
+    for (int t=0 ; t<100; t++){
+
+        cout << "Time Step:\t"<< t << "\t";
+        cout << "Cell Velocity: <"<<cellset[10][10].U() <<", "<<cellset[10][10].V()<<">\tPressure: "<<cellset[10][10].P()<<"\tCell Tau: "<< Tau(grd,cellset,10,10,CFL)<<"\t";
+        cout<<"\t" << "Energy: "<<cellset[10][10].rhoE()<<"\t" << "Entropy: "<< cellset[10][10].S() << "\t" << "Temp: " << cellset[10][10].T() << "\t" << "Enthalpy: " << cellset[10][10].H()<<"\t"
+        <<"Expected %P rise at front of airfoil: "<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
+        cout << endl;
+
+        cellset = RK4(grd, cellset, CFL);
+    }
 }
 
 void loadICs(){
