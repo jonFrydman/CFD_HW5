@@ -129,5 +129,4 @@ class cellState{
         }
         //grid based functions
 };
-
 #endif // CELLSTATE_H
