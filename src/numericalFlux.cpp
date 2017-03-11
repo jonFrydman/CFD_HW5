@@ -51,30 +51,43 @@ vector<double> SouthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, 
     return GenericFlux(grd, cellset, i, j, 0, -1);
 }
 
-vector<double> JamesonViscocity(grid &grd, vector< vector<cellState> > &cellset,int i, int j) {
-    double alpha2=1.0/4;
-    double alpha4=1.0/256;
+double nu(vector< vector<cellState> > &cellset,int i, int j, int k, int i_ctrl, j_ctrl){
+
+double a = cellset[i + k*i_ctrl + 1*i_ctrl][j + k*j_ctrl + 1*j_ctrl].P();
+double b = cellset[i + k*i_ctrl][j + k*j_ctrl].P();
+double c = cellset[i + k*i_ctrl - 1*i_ctrl][j + k*j_ctrl - 1*j_ctrl].P();
+
+return abs((a - 2 * b + c) / (a + 2 * b + c));
+
+}
+
+vector<double> GenericJamesonViscosity(grid &grd, vector< vector<cellState> > &cellset,int i, int j, int i_ctrl, int j_ctrl) {
 	//find max of (nu(i-1), nu(i), nu(i+1), nu(i+2))
+
+   	//find max of (nu(i-1), nu(i), nu(i+1), nu(i+2))
 	double nu_max = 0.0;
 	double nu_test;
 
 	//This loop to find the maximum nu iterates through k seeing if nu[i+k] is greater than any previous contenders of nu
 	for (int k = -1; k<2; k++) {
 		//the expression for nu with (i+k) in place of i to allow the loop to examine nu(i-1), nu(i), nu(i+1), and nu(i+2)
-		nu_test = abs((cellset[(i+k)+ 1][j].P() - 2 * cellset[i+k][j].P() + cellset[(i+k) - 1][j].P()) / (cellset[(i+k) + 1][j].P() + 2 * cellset[i+k][j].P() + cellset[(i+k) - 1][j].P()));
+
+		nu_test = nu(cellset,i,j,k, i_ctrl, j_ctrl);
+
 		if (nu_test > nu_max){
 			nu_max = nu_test;
 		}
 	}
+
     //Calculate the epsilon values at i+1/2,j
 	double epsilon2, epsilon4;
 	// prepare the (i+1/2,j) values needed in the epsilon terms
-	double u_avg = (cellset[i][j].U() + cellset[i + 1][j].U()) / 2;
-	double v_avg = (cellset[i][j].V() + cellset[i + 1][j].V()) / 2;
-	double c_avg = (cellset[i][j].C() + cellset[i + 1][j].C()) / 2;
+	double u_avg = (cellset[i][j].U() + cellset[i + 1*i_ctrl][j + 1*j_ctrl].U()) / 2;
+	double v_avg = (cellset[i][j].V() + cellset[i + 1*i_ctrl][j + 1*j_ctrl].V()) / 2;
+	double c_avg = (cellset[i][j].C() + cellset[i + 1*i_ctrl][j + 1*j_ctrl].C()) / 2;
 
 	// The dot product term in the epsilon terms
-	double u_vec_dot_s_vec = u_avg*grd.xWnorm[i + 1][j] + v_avg*grd.yWnorm[i + 1][j];
+	double u_vec_dot_s_vec = u_avg*grd.xWnorm[i + 1*i_ctrl][j + 1*j_ctrl] + v_avg*grd.yWnorm[i + 1*i_ctrl][j + 1*j_ctrl];
 
 	// Solve for epsilon 2 and 4
 	epsilon2 = 0.5*alpha2*(u_vec_dot_s_vec + c_avg)*nu_max;
@@ -84,60 +97,33 @@ vector<double> JamesonViscocity(grid &grd, vector< vector<cellState> > &cellset,
 	}
     vector<double> D_AV(4, 0.0);
 	// The Jamison Artificial Viscosity
-	D_AV[0] = epsilon2*(cellset[i + 1][j].rho() - cellset[i][j].rho()) - epsilon4*(cellset[i + 2][j].rho() - 3 * cellset[i + 1][j].rho() + 3 * cellset[i][j].rho() - cellset[i - 1][j].rho());
-	D_AV[1] = epsilon2*(cellset[i + 1][j].rhoU() - cellset[i][j].rhoU()) - epsilon4*(cellset[i + 2][j].rhoU() - 3 * cellset[i + 1][j].rhoU() + 3 * cellset[i][j].rhoU() - cellset[i - 1][j].rhoU());
-	D_AV[2] = epsilon2*(cellset[i + 1][j].rhoV() - cellset[i][j].rhoV()) - epsilon4*(cellset[i + 2][j].rhoV() - 3 * cellset[i + 1][j].rhoV() + 3 * cellset[i][j].rhoV() - cellset[i - 1][j].rhoV());
-	D_AV[3] = epsilon2*(cellset[i + 1][j].rhoE() - cellset[i][j].rhoE()) - epsilon4*(cellset[i + 2][j].rhoE() - 3 * cellset[i + 1][j].rhoE() + 3 * cellset[i][j].rhoE() - cellset[i - 1][j].rhoE());
+
+	D_AV[0] = epsilon2*(cellset[i + 1*i_ctrl][j + 1*j_ctrl].rho() - cellset[i][j].rho()) - epsilon4*(cellset[i + 2*i_ctrl][j + 2*j_ctrl].rho() - 3 * cellset[i + 1*i_ctrl][j + 1*j_ctrl].rho() + 3 * cellset[i][j].rho() - cellset[i - 1*i_ctrl][j - 1*j_ctrl].rho());
+	D_AV[1] = epsilon2*(cellset[i + 1*i_ctrl][j + 1*j_ctrl].rhoU() - cellset[i][j].rhoU()) - epsilon4*(cellset[i + 2*i_ctrl][j + 2*j_ctrl].rhoU() - 3 * cellset[i + 1*i_ctrl][j + 1*j_ctrl].rhoU() + 3 * cellset[i][j].rhoU() - cellset[i - 1*i_ctrl][j - 1*j_ctrl].rhoU());
+	D_AV[2] = epsilon2*(cellset[i + 1*i_ctrl][j + 1*j_ctrl].rhoV() - cellset[i][j].rhoV()) - epsilon4*(cellset[i + 2*i_ctrl][j + 2*j_ctrl].rhoV() - 3 * cellset[i + 1*i_ctrl][j + 1*j_ctrl].rhoV() + 3 * cellset[i][j].rhoV() - cellset[i - 1*i_ctrl][j - 1*j_ctrl].rhoV());
+	D_AV[3] = epsilon2*(cellset[i + 1*i_ctrl][j + 1*j_ctrl].rhoE() - cellset[i][j].rhoE()) - epsilon4*(cellset[i + 2*i_ctrl][j + 2*j_ctrl].rhoE() - 3 * cellset[i + 1*i_ctrl][j + 1*j_ctrl].rhoE() + 3 * cellset[i][j].rhoE() - cellset[i - 1*i_ctrl][j - 1*j_ctrl].rhoE());
 	return D_AV;
 }
 
 vector<double> EastJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j) {
 
-    vector<double> D_AV(4, 0.0);
-
-    D_AV[0] = 1.1;
-    D_AV[1] = 1.1;
-    D_AV[2] = 1.1;
-    D_AV[3] = 1.1;
-
-    return D_AV;
+return GenericJamesonViscosity(grd, cellset, i, j, 1, 0);
 
 };
 
 vector<double> WestJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j) {
 
-    vector<double> D_AV(4, 0.0);
-
-    D_AV[0] = 1.1;
-    D_AV[1] = 1.1;
-    D_AV[2] = 1.1;
-    D_AV[3] = 1.1;
-
-    return D_AV;
+return GenericJamesonViscosity(grd, cellset, i - 1, j, 1, 0);
 
 };
 vector<double> NorthJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j) {
 
-    vector<double> D_AV(4, 0.0);
-
-    D_AV[0] = 1.1;
-    D_AV[1] = 1.1;
-    D_AV[2] = 1.1;
-    D_AV[3] = 1.1;
-
-    return D_AV;
+return GenericJamesonViscosity(grd, cellset, i, j, 0, 1);
 
 };
 vector<double> SouthJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j) {
 
-    vector<double> D_AV(4, 0.0);
-
-    D_AV[0] = 1.1;
-    D_AV[1] = 1.1;
-    D_AV[2] = 1.1;
-    D_AV[3] = 1.1;
-
-    return D_AV;
+    return GenericJamesonViscosity(grd, cellset, i - 1, j, 0, 1);
 
 };
 
@@ -215,10 +201,10 @@ vector<double> Residuals(grid &grd, vector< vector<cellState> > &cellset,int i, 
     EFAV = EastFlux_AV(grd,cellset,i,j) ;
     WFAV = WestFlux_AV(grd,cellset,i,j);
 
-    RESIDUALS[0] = NFAV[0] + SFAV[0] + EFAV[0] + WFAV[0];
-    RESIDUALS[1] = NFAV[1] + SFAV[1] + EFAV[1] + WFAV[1];
-    RESIDUALS[2] = NFAV[2] + SFAV[2] + EFAV[2] + WFAV[2];
-    RESIDUALS[3] = NFAV[3] + SFAV[3] + EFAV[3] + WFAV[3];
+    RESIDUALS[0] = NFAV[0] - SFAV[0] + EFAV[0] - WFAV[0];
+    RESIDUALS[1] = NFAV[1] - SFAV[1] + EFAV[1] - WFAV[1];
+    RESIDUALS[2] = NFAV[2] - SFAV[2] + EFAV[2] - WFAV[2];
+    RESIDUALS[3] = NFAV[3] - SFAV[3] + EFAV[3] - WFAV[3];
 
     return RESIDUALS;
 

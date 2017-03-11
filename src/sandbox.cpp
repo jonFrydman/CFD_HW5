@@ -29,8 +29,12 @@ int main(){
 //        cout<<"\t\tCell Area:\t"<<grd.area[i][0]<<"\t\tAspect Ratio:\t"<<grd.xSside[i][0]/grd.xWside[i][0]<<"\t\tOrthogonality:\t"<<cos(grd.xWside[i][0]/grd.xSside[i][0])*180/pi<<" deg\n\n";
 //    }
     loadICs();
+
+ for (int t;t<10;t++){
+
+    cout << "Time Step:\t"<< t << endl;
     cout << "Cell Velocity:\t<"<<cellset[10][10].U()<<", "<<cellset[10][10].V()<<">\t\tPressure:\t"<<cellset[10][10].P()<<"\n";
-    cout << "Engergy:\t"<<cellset[10][10].rhoE()<<"\n";
+    cout << "Energy:\t"<<cellset[10][10].rhoE()<<"\n";
     cout << "P_ref:\t"<<P_ref<<"\t\trhoE_ref:\t"<<rhoE_ref<<"\t\trhoU_ref:\t"<<rho_ref*speed_ref<<"\n";
 
     cout << "Expected %P rise at front of airfoil:\t"<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
@@ -38,6 +42,10 @@ int main(){
     vector<double> test = EastFlux(grd, cellset, 10,10);
     cout<<"\t\tF*(AV)1:\t" << test[0] << endl << "\t\tF*(AV)2:\t" << test[1]<< endl  << "\t\tF*(AV)3:\t" << test[2]<< endl << "\t\tF*(AV)4:\t" << test[3]<< endl;
 
+    system("pause")
+
+
+}
 
 return 0;
 }
