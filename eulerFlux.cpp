@@ -40,3 +40,4 @@ vector<double> NorthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, 
 vector<double> SouthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
     return GenericFlux(grd, cellset, i, j, 0, -1);
 }
+

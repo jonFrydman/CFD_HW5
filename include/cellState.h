@@ -127,6 +127,8 @@ class cellState{
             xi=C.xi;
             eta=C.eta;
         }
+        int i(){return xi;}
+        int j(){return eta;}
         //grid based functions
 };
 #endif // CELLSTATE_H

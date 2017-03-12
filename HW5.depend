@@ -35,7 +35,7 @@
 1489261754 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\referenceparameters.h
 	<math.h>
 
-1489269856 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\cellstate.h
+1489276720 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\cellstate.h
 	<math.h>
 	<grid.h>
 
@@ -73,4 +73,14 @@
 	"cellState.h"
 	"grid.h"
 	<vector>
+
+1489261754 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\referenceparameters.h
+	<math.h>
+
+1489276660 source:h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\eulerflux.cpp
+	"cellState.h"
+	"grid.h"
+	<vector>
+	<iostream>
+	"eulerFlux.h"
 
