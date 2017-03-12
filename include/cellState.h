@@ -1,7 +1,6 @@
 #ifndef CELLSTATE_H
 #define CELLSTATE_H
 #include <math.h>
-#include <grid.h>
 
 class cellState{
     //Cell State hold conserved properties of a cell as well as derived and thermo properties.

@@ -1,6 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 #include<fstream>
+#include<string>
 #include<cstdlib>
 #include<algorithm>
 #include<vector>

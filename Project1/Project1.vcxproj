@@ -113,8 +113,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cellState.h" />
+    <ClInclude Include="..\include\eulerFlux.h" />
     <ClInclude Include="..\include\grid.h" />
     <ClInclude Include="..\include\numericalFlux.h" />
+    <ClInclude Include="..\include\referenceParameters.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\eulerFlux.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\include;C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\numericalFlux.cpp" />
+    <ClCompile Include="..\sandbox.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
