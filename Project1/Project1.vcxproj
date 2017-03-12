@@ -70,12 +70,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <SourcePath>C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5;$(SourcePath)</SourcePath>
+    <IncludePath>C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\include;C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
