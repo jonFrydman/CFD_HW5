@@ -53,6 +53,38 @@ int main(){
         cellset = RK4(grd, cellset, CFL);
         system("pause");
     }
+
+	fstream fout;
+
+	fout.open("GridFile.dat");
+	fout << "TITLE = NACA GRID \n";
+	fout << "FILETYPE = GRID \n";
+	fout << "VARIABLES = \"X\", \"Y\" \n";
+	fout << "ZONE I=" << grd.N - 2 << " , J=" << grd.M - 2 << ", F=POINT \n";
+	for (int j = 0; j < grd.M - 1; j++) {
+		for (int i = 0; i < grd.N - 1; i++) {
+
+			fout << grd.xCorner[i][j] << ' ' << grd.xCorner[i][j] << std::endl;
+
+		}
+	}
+	fout.close();
+
+	fout.open("SolutionFile.dat");
+	fout << "TITLE = AIRFOIL SOLUTION VALUES \n";
+	fout << "FILETYPE = SOLUTION \n";
+	fout << "VARIABLES = \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\" \n";
+	fout << "ZONE I = " << grd.N - 2 << " , J = " << grd.M - 2 << " , K = " << 6 << ", F=POINT \n";
+	for (int j = 0; j < grd.M - 1; j++) {
+		for (int i = 0; i < grd.N - 1; i++) {
+
+			fout << cellset[i][j].speed << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ' << cellset[i][j].H()
+				<< ' '<< cellset[i][j].S() << ' ' << cellset[i][j].U() << std::endl;
+
+		}
+	}
+	fout.close();
+
 }
 
 void loadICs(){
