@@ -13,25 +13,27 @@ vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i
     std::vector<double> EFAV(4, 0.0);
     std::vector<double> WFAV(4, 0.0);
 
+    vector<cellState> ns_stencil=stencilNS(grd, cellset, i, j);
+    vector<cellState> ew_stencil=stencilEW(grd, cellset, i, j);
     if(j>=2 && j<grd.M-4){ //if away from the airfoil and the airfoil boundary, use artificial viscocity
-        NFAV = NorthFlux_AV(grd, stencilNS(grd, cellset, i, j));
-        SFAV = SouthFlux_AV(grd, stencilNS(grd, cellset, i, j));
+        NFAV = NorthFlux_AV(grd, ns_stencil);
+        SFAV = SouthFlux_AV(grd, ns_stencil);
     }
     else if(j==0){ //at airfoil boundary airfoil case, no AV
-        NFAV = NorthFlux(grd, stencilNS(grd, cellset, i, j));
+        NFAV = NorthFlux(grd, ns_stencil);
         SFAV = AirfoilFlux(grd, cellset, i);
     }
     else if(j==grd.M-2){
        // NFAV = InletOutletFlux(grd, i);
-        SFAV = SouthFlux(grd, stencilNS(grd, cellset,i,j));
+        SFAV = SouthFlux(grd, ns_stencil);
     }
     else{ //near boundaries assume AV=0
-        NFAV = NorthFlux(grd, stencilNS(grd, cellset, i, j));
-        SFAV = SouthFlux(grd, stencilNS(grd, cellset, i, j));
+        NFAV = NorthFlux(grd, ns_stencil);
+        SFAV = SouthFlux(grd, ns_stencil);
     }
     //AV always on in the East/West direction
-    EFAV = EastFlux_AV(grd, stencilEW(grd, cellset,i,j)) ;
-    WFAV = WestFlux_AV(grd, stencilEW(grd, cellset, i, j));
+    EFAV = EastFlux_AV(grd, ew_stencil) ;
+    WFAV = WestFlux_AV(grd, ew_stencil);
 
     RESIDUALS[0] = NFAV[0] - SFAV[0] + EFAV[0] - WFAV[0];
     RESIDUALS[1] = NFAV[1] - SFAV[1] + EFAV[1] - WFAV[1];
