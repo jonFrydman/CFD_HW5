@@ -90,10 +90,11 @@ class grid{
             }
         }
         void defineSideLengths(){
-            xSside.resize(N-1, std::vector<double>(M-1));
-            ySside.resize(N-1, std::vector<double>(M-1));
+            xSside.resize(N-1, std::vector<double>(M));
+            ySside.resize(N-1, std::vector<double>(M));
             xWside.resize(N-1, std::vector<double>(M-1));
             yWside.resize(N-1, std::vector<double>(M-1));
+            //Side length on the south side and west side of cell
             for(int i=0; i<N-1; i++){
                 for(int j=0; j<M-1; j++){
                     xSside[i][j]=abs(xCorner[i+1][j]-xCorner[i][j]);
@@ -101,11 +102,13 @@ class grid{
                     xWside[i][j]=abs(xCorner[i][j+1]-xCorner[i][j]);
                     yWside[i][j]=abs(yCorner[i][j+1]-yCorner[i][j]);
                 }
+                xSside[i][M-1]=abs(xCorner[i+1][M-1]-xCorner[i][M-1]);
+                ySside[i][M-1]=abs(yCorner[i+1][M-1]-yCorner[i][M-1]);
             }
         }
         void defineSideNormals(){
-            xSnorm.resize(N-1, std::vector<double>(M-1));
-            ySnorm.resize(N-1, std::vector<double>(M-1));
+            xSnorm.resize(N-1, std::vector<double>(M));
+            ySnorm.resize(N-1, std::vector<double>(M));
             xWnorm.resize(N-1, std::vector<double>(M-1));
             yWnorm.resize(N-1, std::vector<double>(M-1));
             for(int i=0; i<N-1; i++){
@@ -117,6 +120,9 @@ class grid{
                     yWnorm[i][j]=(xCorner[i][j+1]-xCorner[i][j])/Wlength;
                     xWnorm[i][j]=-(yCorner[i][j+1]-yCorner[i][j])/Wlength;
                 }
+                double Slength=sqrt(pow(xSside[i][M-1],2)+pow(ySside[i][M-1],2));
+                ySnorm[i][M-1]=-(xCorner[i+1][M-1]-xCorner[i][M-1])/Slength;
+                xSnorm[i][M-1]=(yCorner[i+1][M-1]-yCorner[i][M-1])/Slength;
             }
         }
         void defineIJNormals(){
