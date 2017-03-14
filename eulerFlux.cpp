@@ -4,7 +4,7 @@
 #include <iostream>
 #include "eulerFlux.h"
 
-
+using namespace std;
 vector<double> GenericFlux(grid &grd,  vector<cellState> &stencil){
     double FSTAR1, FSTAR2, FSTAR3, FSTAR4;
     double GSTAR1, GSTAR2, GSTAR3, GSTAR4;
@@ -22,6 +22,7 @@ vector<double> GenericFlux(grid &grd,  vector<cellState> &stencil){
     int J=stencil[3].j();
 
 	std::vector<double> GENERIC_FLUX(4, 0.0);
+	//Perpendicular flux to the boundary normal is <F, G> dot <nx, ny>
 	GENERIC_FLUX[0] = FSTAR1*grd.xWnorm[I][J] + GSTAR1*grd.yWnorm[I][J];
 	GENERIC_FLUX[1] = FSTAR2*grd.xWnorm[I][J] + GSTAR2*grd.yWnorm[I][J];
 	GENERIC_FLUX[2] = FSTAR3*grd.xWnorm[I][J] + GSTAR3*grd.yWnorm[I][J];

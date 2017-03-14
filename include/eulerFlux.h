@@ -5,12 +5,11 @@
 #include "grid.h"
 #include <vector>
 
-using namespace std;
-vector<double> GenericFlux(grid &grd, vector< vector<cellState> > &cellset, int i, int j, int delta_i, int delta_j);
-vector<double> EastFlux(grid &grd, vector< vector<cellState> > &cellset, int i, int j);
-vector<double> WestFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> NorthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> SouthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
+vector<double> GenericFlux(grid &grd,  vector<cellState> &stencil);
 
+vector<double> EastFlux(grid &grd, vector<cellState> &stencil);
+vector<double> WestFlux(grid &grd, vector<cellState> &stencil);
+vector<double> NorthFlux(grid &grd, vector<cellState> &stencil);
+vector<double> SouthFlux(grid &grd, vector<cellState> &stencil);
 
 #endif // EULERFLUX_H
