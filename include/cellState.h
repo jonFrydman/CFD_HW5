@@ -15,12 +15,12 @@ class cellState{
     public:
         //constructors in cellState.cpp
         cellState(){
-            cell_rho=nan();
-            cell_rhoU=nan();
-            cell_rhoV=nan();
-            cell_rhoE=nan();
-            cell_gamma=nan();
-            cell_cv=nan();
+            cell_rho=nan("");
+            cell_rhoU= nan("");
+            cell_rhoV= nan("");
+            cell_rhoE= nan("");
+            cell_gamma= nan("");
+            cell_cv= nan("");
             xi=-1;
             eta=-1;
             valid=false;

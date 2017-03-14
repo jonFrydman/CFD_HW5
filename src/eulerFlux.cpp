@@ -30,28 +30,28 @@ vector<double> GenericFlux(grid &grd,  vector<cellState> &stencil){
 	return GENERIC_FLUX;
 }
 
-vector<double> EastFlux(grid &grd, vector< vector<cellState> > &cellset, int i, int j){
+vector<double> EastFlux(grid &grd, vector<cellState> &stencil, int i, int j){
     vector<cellState> substencil(6);
     for(int i=0; i<6; i++){
         substencil[i]=stencil[i+1];
     }
     return GenericFlux(grd, substencil);
 }
-vector<double> WestFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
+vector<double> WestFlux(grid &grd, vector<cellState> &stencil,int i, int j){
     vector<cellState> substencil(6);
     for(int i=0; i<6; i++){
         substencil[i]=stencil[i];
     }
     return GenericFlux(grd, substencil);
 }
-vector<double> NorthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
+vector<double> NorthFlux(grid &grd, vector<cellState> &stencil,int i, int j){
     vector<cellState> substencil(6);
     for(int i=0; i<6; i++){
         substencil[i]=stencil[i+1];
     }
     return GenericFlux(grd, substencil);
 }
-vector<double> SouthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
+vector<double> SouthFlux(grid &grd, vector<cellState> &stencil,int i, int j){
     vector<cellState> substencil(6);
     for(int i=0; i<6; i++){
         substencil[i]=stencil[i];

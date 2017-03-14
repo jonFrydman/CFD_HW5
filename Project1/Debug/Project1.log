@@ -1,10 +1,22 @@
 ﻿  sandbox.cpp
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp(102): warning C4018: '<': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp(107): warning C4018: '>=': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp(112): warning C4018: '>=': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp(132): warning C4018: '<': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp(137): warning C4018: '>': signed/unsigned mismatch
   numericalFlux.cpp
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(102): error C2065: 'cellset': undeclared identifier
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(102): error C2065: 'i': undeclared identifier
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(102): error C2065: 'j': undeclared identifier
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(103): error C2065: 'cellset': undeclared identifier
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(103): error C2065: 'i': undeclared identifier
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(103): error C2065: 'j': undeclared identifier
+  integration.cpp
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(16): error C3861: 'stencilNS': identifier not found
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(17): error C3861: 'stencilNS': identifier not found
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(20): error C3861: 'stencilNS': identifier not found
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(21): error C2660: 'AirfoilFlux': function does not take 2 arguments
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(24): error C3861: 'InletOutletFlux': identifier not found
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(25): error C3861: 'stencilNS': identifier not found
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(25): error C3861: 'SorthFlux': identifier not found
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(28): error C3861: 'stencilNS': identifier not found
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(29): error C3861: 'stencilNS': identifier not found
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(29): error C3861: 'SorthFlux': identifier not found
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(32): error C3861: 'stencilEW': identifier not found
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(33): error C3861: 'stencilEW': identifier not found
   eulerFlux.cpp
   Generating Code...

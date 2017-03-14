@@ -40,7 +40,7 @@ int main(){
 
 	cout << "Please make the console full screen"<<endl;
 	system("pause");
-
+	/*
     for (int t=0 ; t<100; t++){
 
         cout << "Time Step:\t"<< t << "\t";
@@ -53,7 +53,7 @@ int main(){
         cellset = RK4(grd, cellset, CFL);
         system("pause");
     }
-
+*/
 	fstream fout;
 
 	fout.open("GridFile.dat");
@@ -78,7 +78,7 @@ int main(){
 	for (int j = 0; j < grd.M - 1; j++) {
 		for (int i = 0; i < grd.N - 1; i++) {
 
-			fout << cellset[i][j].speed << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ' << cellset[i][j].H()
+			fout << cellset[i][j].speed() << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ' << cellset[i][j].H()
 				<< ' '<< cellset[i][j].S() << ' ' << cellset[i][j].U() << std::endl;
 
 		}
@@ -137,7 +137,7 @@ vector<cellState> stencilNS(vector< vector<cellState> > cellset, int i, int j){
     else if(j+3>cellset[0].size()){
         // INLET / OUTLET CONDITIONS
     }
-    else if(ij-3 <0){ //Stencil near the airfoil
+    else if(j-3 <0){ //Stencil near the airfoil
         // AIRFOIL CONDITION
     }
     return stencil;

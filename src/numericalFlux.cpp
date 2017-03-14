@@ -98,7 +98,7 @@ vector<double> SouthJamVisc(grid &grd,  vector<cellState> &stencil) {
 }
 
 vector<double> EastFlux_AV(grid &grd,  vector<cellState> &stencil){
-    vector<double> EFlux = EastFlux(grd,stenicl);
+    vector<double> EFlux = EastFlux(grd,stencil);
     vector<double> EJAV = EastJamVisc(grd, stencil);
     vector<double> FluxAV(4, 0.0);
 
@@ -153,9 +153,9 @@ vector<double> AirfoilFlux(grid & grd, vector< vector<cellState> > cellset, int 
 	Pboundary = 3.0 / 2 * cellset[i][0].P() - 1.0 / 2 * cellset[i][1].P();// Linear extrapolation of pressure. See p 21 of stanford
 
 	FoilFlux[0] = 0;
-	FoilFlux[2] = Pboundary*grd.xSnorm[i][0];
-	FoilFlux[3] = Pboundary*grd.ySnorm[i][0];
-	FoilFlux[4] = 0;
+	FoilFlux[1] = Pboundary*grd.xSnorm[i][0];
+	FoilFlux[2] = Pboundary*grd.ySnorm[i][0];
+	FoilFlux[3] = 0;
 
 	return FoilFlux;
 }
