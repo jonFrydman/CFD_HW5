@@ -9,19 +9,19 @@
 
 using namespace std;
 
-double nu_max(grid &grd, vector< vector<cellState> > &cellset,int i, int j, int delta_i, int delta_j);
-vector<double> GenericJamesonViscocity(grid &grd, vector< vector<cellState> > &cellset,int i, int j, int delta_i, int delta_j);
-vector<double> NorthJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> SouthJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> EastJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> WestJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
+double nu_max(grid &grd,  vector<cellState> &stencil);
+vector<double> GenericJamesonViscocity(grid &grd,  vector<cellState> &stencil);
+vector<double> NorthJamVisc(grid &grd,  vector<cellState> &stencil);
+vector<double> SouthJamVisc(grid &grd,  vector<cellState> &stencil);
+vector<double> EastJamVisc(grid &grd,  vector<cellState> &stencil);
+vector<double> WestJamVisc(grid &grd,  vector<cellState> &stencil);
 
-vector<double> NorthFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> SouthFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> EastFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> WestFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
+vector<double> NorthFlux_AV(grid &grd,  vector<cellState> &stencil);
+vector<double> SouthFlux_AV(grid &grd,  vector<cellState> &stencil);
+vector<double> EastFlux_AV(grid &grd,  vector<cellState> &stencil);
+vector<double> WestFlux_AV(grid &grd,  vector<cellState> &stencil);
 
-vector<double> Residuals(grid &grd, vector< vector<cellState> > &cellset,int i, int j, double CFL);
+vector<double> Residuals(grid &grd,  vector<cellState> &stencil, double CFL);
 vector<double> AlphaRK();
 double Tau(grid &grd, vector< vector<cellState> > &cellset, int i, int j, double CFL);
 

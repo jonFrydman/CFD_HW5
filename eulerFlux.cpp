@@ -5,39 +5,56 @@
 #include "eulerFlux.h"
 
 
-vector<double> GenericFlux(grid &grd, vector< vector<cellState> > &cellset, int i, int j, int delta_i, int delta_j){
+vector<double> GenericFlux(grid &grd,  vector<cellState> &stencil){
     double FSTAR1, FSTAR2, FSTAR3, FSTAR4;
     double GSTAR1, GSTAR2, GSTAR3, GSTAR4;
 
-    FSTAR1 = 0.5*(cellset[i][j].F1() + cellset[i + delta_i][j+delta_j].F1());
-	FSTAR2 = 0.5*(cellset[i][j].F2() + cellset[i + delta_i][j+delta_j].F2());
-	FSTAR3 = 0.5*(cellset[i][j].F3() + cellset[i + delta_i][j+delta_j].F3());
-	FSTAR4 = 0.5*(cellset[i][j].F4() + cellset[i + delta_i][j+delta_j].F4());
-	GSTAR1 = 0.5*(cellset[i][j].G1() + cellset[i + delta_i][j+delta_j].G1());
-	GSTAR2 = 0.5*(cellset[i][j].G2() + cellset[i + delta_i][j+delta_j].G2());
-	GSTAR3 = 0.5*(cellset[i][j].G3() + cellset[i + delta_i][j+delta_j].G3());
-	GSTAR4 = 0.5*(cellset[i][j].G4() + cellset[i + delta_i][j+delta_j].G4());
+    FSTAR1 = 0.5*(stencil[2].F1() + stencil[3].F1());
+	FSTAR2 = 0.5*(stencil[2].F2() + stencil[3].F2());
+	FSTAR3 = 0.5*(stencil[2].F3() + stencil[3].F3());
+	FSTAR4 = 0.5*(stencil[2].F4() + stencil[3].F4());
+	GSTAR1 = 0.5*(stencil[2].G1() + stencil[3].G1());
+	GSTAR2 = 0.5*(stencil[2].G2() + stencil[3].G2());
+	GSTAR3 = 0.5*(stencil[2].G3() + stencil[3].G3());
+	GSTAR4 = 0.5*(stencil[2].G4() + stencil[3].G4());
+
+	int I=stencil[3].i();
+    int J=stencil[3].j();
 
 	std::vector<double> GENERIC_FLUX(4, 0.0);
-
-	GENERIC_FLUX[0] = FSTAR1*grd.xWnorm[i+delta_i][j+delta_j] + GSTAR1*grd.yWnorm[i+delta_i][j+delta_j];
-	GENERIC_FLUX[1] = FSTAR2*grd.xWnorm[i+delta_i][j+delta_j] + GSTAR2*grd.yWnorm[i+delta_i][j+delta_j];
-	GENERIC_FLUX[2] = FSTAR3*grd.xWnorm[i+delta_i][j+delta_j] + GSTAR3*grd.yWnorm[i+delta_i][j+delta_j];
-	GENERIC_FLUX[3] = FSTAR4*grd.xWnorm[i+delta_i][j+delta_j] + GSTAR4*grd.yWnorm[i+delta_i][j+delta_j];
-
+	GENERIC_FLUX[0] = FSTAR1*grd.xWnorm[I][J] + GSTAR1*grd.yWnorm[I][J];
+	GENERIC_FLUX[1] = FSTAR2*grd.xWnorm[I][J] + GSTAR2*grd.yWnorm[I][J];
+	GENERIC_FLUX[2] = FSTAR3*grd.xWnorm[I][J] + GSTAR3*grd.yWnorm[I][J];
+	GENERIC_FLUX[3] = FSTAR4*grd.xWnorm[I][J] + GSTAR4*grd.yWnorm[I][J];
 	return GENERIC_FLUX;
 }
 
 vector<double> EastFlux(grid &grd, vector< vector<cellState> > &cellset, int i, int j){
-    return GenericFlux(grd, cellset, i, j, 1, 0);
+    vector<cellState> substencil(6);
+    for(int i=0; i<6; i++){
+        substencil[i]=stencil[i+1];
+    }
+    return GenericFlux(grd, substencil);
 }
 vector<double> WestFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
-    return GenericFlux(grd, cellset, i, j, -1, 0);
+    vector<cellState> substencil(6);
+    for(int i=0; i<6; i++){
+        substencil[i]=stencil[i];
+    }
+    return GenericFlux(grd, substencil);
 }
 vector<double> NorthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
-    return GenericFlux(grd, cellset, i, j, 0, 1);
+    vector<cellState> substencil(6);
+    for(int i=0; i<6; i++){
+        substencil[i]=stencil[i+1];
+    }
+    return GenericFlux(grd, substencil);
 }
 vector<double> SouthFlux(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
-    return GenericFlux(grd, cellset, i, j, 0, -1);
+    vector<cellState> substencil(6);
+    for(int i=0; i<6; i++){
+        substencil[i]=stencil[i];
+    }
+    return GenericFlux(grd, substencil);
 }
 

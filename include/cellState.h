@@ -10,16 +10,20 @@ class cellState{
     private:
         double cell_rho, cell_rhoU, cell_rhoV, cell_rhoE, cell_gamma, cell_cv; //cell state properties
         int xi, eta; //(xi, eta) location of cell center;
+        bool valid; //flag that indicates whether this is a null cell
 
     public:
         //constructors in cellState.cpp
         cellState(){
-            cell_rho=0;
-            cell_rhoU=0;
-            cell_rhoV=0;
-            cell_rhoE=0;
-            cell_gamma=0;
-            cell_cv=0;
+            cell_rho=nan();
+            cell_rhoU=nan();
+            cell_rhoV=nan();
+            cell_rhoE=nan();
+            cell_gamma=nan();
+            cell_cv=nan();
+            xi=-1;
+            eta=-1;
+            valid=false;
         }
         cellState(double a, double b, double c, double d, double e, double f, int i, int j){ //constructs cell with a grid context
             cell_rho=a;
@@ -30,6 +34,7 @@ class cellState{
             cell_cv=f;
             xi=i;
             eta=j;
+            valid=true;
         }
         cellState(double a, double b, double c, double d, double e, double f){ //makes an anonymous cell state manually
             cell_rho=a;
@@ -38,6 +43,9 @@ class cellState{
             cell_rhoE=d;
             cell_gamma=e;
             cell_cv=f;
+            xi=-1;
+            eta=-1;
+            valid=true;
         }
         cellState(cellState a, cellState b){//makes an anonymous cell state from the average of two cells
             cell_rho=(a.rho()+b.rho())/2;
@@ -46,6 +54,9 @@ class cellState{
             cell_rhoE=(a.rhoE()+b.rhoE())/2;
             cell_gamma=(a.gamma()+b.gamma())/2;
             cell_cv=(a.cv()+b.cv())/2;
+            xi=-1;
+            eta=-1;
+            valid=true;
         }
         //conserved quantities and thermo properties
         double rho() {return cell_rho;}
@@ -125,9 +136,11 @@ class cellState{
             cell_cv=C.cell_cv;
             xi=C.xi;
             eta=C.eta;
+            valid=true;
         }
         int i(){return xi;}
         int j(){return eta;}
+        bool isValid(){return valid;}
         //grid based functions
 };
 #endif // CELLSTATE_H

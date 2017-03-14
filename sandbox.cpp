@@ -72,7 +72,7 @@ vector<cellState> stencilEW(vector< vector<cellState> > cellset, int i, int j){
             stencil[n]=cellset[i+n-3][j];
         }
     }
-    else if(i+3>cellset.size()){ //Stencil focused near the I=IMAX border
+    else if(i+3>=cellset.size()){ //Stencil focused near the I=IMAX border
         int cnt=i-3;
         int n=0;
         while(n<7){
@@ -97,15 +97,15 @@ vector<cellState> stencilEW(vector< vector<cellState> > cellset, int i, int j){
 
 vector<cellState> stencilNS(vector< vector<cellState> > cellset, int i, int j){
     vector<cellState> stencil(7);
-    if(j+3<cellset.size() && j-3 >=0){//Interior stencil
+    if(j+3<cellset[0].size() && j-3 >=0){//Interior stencil
         for(int n=0; n<7; n++){
             stencil[n]=cellset[i][j+n-3];
         }
     }
-    else if(i+3>cellset.size()){
+    else if(j+3>cellset[0].size()){
         // INLET / OUTLET CONDITIONS
     }
-    else if(i-3 <0){ //Stencil near the airfoil
+    else if(ij-3 <0){ //Stencil near the airfoil
         // AIRFOIL CONDITION
     }
     return stencil;

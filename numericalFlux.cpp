@@ -98,51 +98,41 @@ vector<double> SouthJamVisc(grid &grd,  vector<cellState> &stencil) {
 }
 
 vector<double> EastFlux_AV(grid &grd,  vector<cellState> &stencil){
-
-    vector<double> EFlux = EastFlux(grd,cellset,i,j);
-    vector<double> EJAV = EastJamVisc(grd, cellset,i,j);
+    vector<double> EFlux = EastFlux(grd,stenicl);
+    vector<double> EJAV = EastJamVisc(grd, stencil);
     vector<double> FluxAV(4, 0.0);
 
     FluxAV[0] = EFlux[0] - EJAV[0];
     FluxAV[1] = EFlux[1] - EJAV[1];
     FluxAV[2] = EFlux[2] - EJAV[2];
     FluxAV[3] = EFlux[3] - EJAV[3];
-
-
     return FluxAV;
 }
-vector<double> WestFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
-
-    vector<double> WFlux = WestFlux(grd,cellset,i,j);
-    vector<double> WJAV = WestJamVisc(grd, cellset,i,j);
+vector<double> WestFlux_AV(grid &grd,  vector<cellState> &stencil){
+    vector<double> WFlux = WestFlux(grd,stencil);
+    vector<double> WJAV = WestJamVisc(grd, stencil);
     vector<double> FluxAV(4, 0.0);
 
     FluxAV[0] = WFlux[0] - WJAV[0];
     FluxAV[1] = WFlux[1] - WJAV[1];
     FluxAV[2] = WFlux[2] - WJAV[2];
     FluxAV[3] = WFlux[3] - WJAV[3];
-
-
     return FluxAV;
 }
-vector<double> NorthFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
-
-    vector<double> NFlux = NorthFlux(grd,cellset,i,j);
-    vector<double> NJAV = NorthJamVisc(grd, cellset,i,j);
+vector<double> NorthFlux_AV(grid &grd,  vector<cellState> &stencil){
+    vector<double> NFlux = NorthFlux(grd, stencil);
+    vector<double> NJAV = NorthJamVisc(grd, stencil);
     vector<double> FluxAV(4, 0.0);
 
     FluxAV[0] = NFlux[0] - NJAV[0];
     FluxAV[1] = NFlux[1] - NJAV[1];
     FluxAV[2] = NFlux[2] - NJAV[2];
     FluxAV[3] = NFlux[3] - NJAV[3];
-
-
     return FluxAV;
 }
-vector<double> SouthFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
-
-    vector<double> SFlux = SouthFlux(grd,cellset,i,j);
-    vector<double> SJAV = SouthJamVisc(grd, cellset,i,j);
+vector<double> SouthFlux_AV(grid &grd,  vector<cellState> &stencil){
+    vector<double> SFlux = SouthFlux(grd, stencil);
+    vector<double> SJAV = SouthJamVisc(grd, stencil);
     vector<double> FluxAV(4, 0.0);
 
     FluxAV[0] = SFlux[0] - SJAV[0];
@@ -154,7 +144,7 @@ vector<double> SouthFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int 
     return FluxAV;
 }
 
-vector<double> Residuals(grid &grd, vector< vector<cellState> > &cellset,int i, int j){
+vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i, int j){
 
     std::vector<double> RESIDUALS(4, 0.0);
     std::vector<double> NFAV(4, 0.0);
@@ -162,23 +152,38 @@ vector<double> Residuals(grid &grd, vector< vector<cellState> > &cellset,int i, 
     std::vector<double> EFAV(4, 0.0);
     std::vector<double> WFAV(4, 0.0);
 
-    NFAV = NorthFlux_AV(grd,cellset,i,j);
-    SFAV = SouthFlux(grd,cellset,i,j);
-    EFAV = EastFlux_AV(grd,cellset,i,j) ;
-    WFAV = WestFlux_AV(grd,cellset,i,j);
+    if(j>=2 && j<grd.M-4){ //if away from the airfoil and the airfoil boundary, use artificial viscocity
+        NFAV = NorthFlux_AV(grd, stencilNS(grd,i,j));
+        SFAV = SouthFlux_AV(grd, stencilNS(grd,i,j));
+    }
+    else if(j==0){ //at airfoil boundary airfoil case, no AV
+        NFAV = NorthFlux(grd, stencilNS(grd,i,j));
+        SFAV = AirfoilFLux(grd, i);
+    }
+    else if(j==grd.M-2){
+        NFAV = InletOutletFLux(grd, i);
+        SFAV = SorthFlux(grd, stencilNS(grd,i,j));
+    }
+    else{ //near boundaries assume AV=0
+        NFAV = NorthFlux(grd, stencilNS(grd,i,j));
+        SFAV = SorthFlux(grd, stencilNS(grd,i,j));
+    }
+    //AV always on in the East/West direction
+    EFAV = EastFlux_AV(grd, stencilEW(grd,i,j)) ;
+    WFAV = WestFlux_AV(grd, stencilEW(grd,i,j));
 
     RESIDUALS[0] = NFAV[0] - SFAV[0] + EFAV[0] - WFAV[0];
     RESIDUALS[1] = NFAV[1] - SFAV[1] + EFAV[1] - WFAV[1];
     RESIDUALS[2] = NFAV[2] - SFAV[2] + EFAV[2] - WFAV[2];
     RESIDUALS[3] = NFAV[3] - SFAV[3] + EFAV[3] - WFAV[3];
-
     return RESIDUALS;
-
 }
 
-double Tau(grid &grd, vector< vector<cellState> > &cellset, int i, int j, double CFL){
-    double denominatorI = (cellset[i][j].U()+cellset[i][j].C())*grd.xInorm[i][j] + (cellset[i][j].V()+cellset[i][j].C())*grd.yInorm[i][j];
-    double denominatorJ = (cellset[i][j].U()+cellset[i][j].C())*grd.xJnorm[i][j] + (cellset[i][j].V()+cellset[i][j].C())*grd.yJnorm[i][j];
+double Tau(grid &grd, cellState cell, double CFL){
+    int i= cell.i();
+    int j= cell.j();
+    double denominatorI = (cell.U()+cell.C())*grd.xInorm[i][j] + (cell.V()+cell.C())*grd.yInorm[i][j];
+    double denominatorJ = (cell.U()+cell.C())*grd.xJnorm[i][j] + (cell.V()+cell.C())*grd.yJnorm[i][j];
     return CFL*grd.area[i][j]/(abs(denominatorI)+abs(denominatorJ)); // ------------- Consider making Tau 0.75 of this if it matters
 }
 
@@ -210,10 +215,10 @@ vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset,
             for(int j=0+5; j<grd.M-1-5; j++) {
                 RESIDUALS = Residuals(grd, cellsetPrev, i, j);
 
-                U_temp[0] = cellset[i][j].rho() - Tau(grd,cellset,i,j,CFL) * alphaRK[k] * RESIDUALS[0];
-                U_temp[1] = cellset[i][j].rhoU() - Tau(grd,cellset,i,j,CFL) * alphaRK[k] * RESIDUALS[1];
-                U_temp[2] = cellset[i][j].rhoV() - Tau(grd,cellset,i,j,CFL) * alphaRK[k] * RESIDUALS[2];
-                U_temp[3] = cellset[i][j].rhoE() - Tau(grd,cellset,i,j,CFL) * alphaRK[k] * RESIDUALS[3];
+                U_temp[0] = cellset[i][j].rho() - Tau(grd,cellset[i][j],CFL) * alphaRK[k] * RESIDUALS[0];
+                U_temp[1] = cellset[i][j].rhoU() - Tau(grd,cellset[i][j],CFL) * alphaRK[k] * RESIDUALS[1];
+                U_temp[2] = cellset[i][j].rhoV() - Tau(grd,cellset[i][j],CFL) * alphaRK[k] * RESIDUALS[2];
+                U_temp[3] = cellset[i][j].rhoE() - Tau(grd,cellset[i][j],CFL) * alphaRK[k] * RESIDUALS[3];
 
                 cellsetPlus[i][j] = cellState(U_temp[0], U_temp[1], U_temp[2], U_temp[3], cellset[i][j].gamma(), cellset[i][j].cv(), i, j);
             }
