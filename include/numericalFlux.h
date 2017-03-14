@@ -22,11 +22,4 @@ vector<double> WestFlux_AV(grid &grd,  vector<cellState> &stencil);
 vector<double> NorthFlux_AV(grid &grd,  vector<cellState> &stencil);
 vector<double> SouthFlux_AV(grid &grd,  vector<cellState> &stencil);
 
-vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i, int j);
-
-double Tau(grid &grd, cellState cell, double CFL);
-
-vector<double> AlphaRK();
-
-vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset, double CFL);
 #endif // NUMERICALFLUX_H_INCLUDED
