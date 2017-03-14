@@ -1,6 +1,10 @@
-﻿  eulerFlux.cpp
-  sandbox.cpp
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\sandbox.cpp(3): fatal error C1083: Cannot open include file: 'referenceParameters.h': No such file or directory
+﻿  sandbox.cpp
   numericalFlux.cpp
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(1): fatal error C1083: Cannot open include file: 'cellState.h': No such file or directory
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(102): error C2065: 'cellset': undeclared identifier
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(102): error C2065: 'i': undeclared identifier
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(102): error C2065: 'j': undeclared identifier
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(103): error C2065: 'cellset': undeclared identifier
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(103): error C2065: 'i': undeclared identifier
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(103): error C2065: 'j': undeclared identifier
+  eulerFlux.cpp
   Generating Code...

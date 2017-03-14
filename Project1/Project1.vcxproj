@@ -18,6 +18,18 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\eulerFlux.cpp" />
+    <ClCompile Include="..\numericalFlux.cpp" />
+    <ClCompile Include="..\sandbox.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\cellState.h" />
+    <ClInclude Include="..\include\eulerFlux.h" />
+    <ClInclude Include="..\include\grid.h" />
+    <ClInclude Include="..\include\numericalFlux.h" />
+    <ClInclude Include="..\include\referenceParameters.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C73601F8-F50D-4D0C-9645-7604BB930676}</ProjectGuid>
     <RootNamespace>Project1</RootNamespace>
@@ -70,7 +82,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <SourcePath>C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5;$(SourcePath)</SourcePath>
-    <IncludePath>C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5;C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,20 +125,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\include\cellState.h" />
-    <ClInclude Include="..\include\eulerFlux.h" />
-    <ClInclude Include="..\include\grid.h" />
-    <ClInclude Include="..\include\numericalFlux.h" />
-    <ClInclude Include="..\include\referenceParameters.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\eulerFlux.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\include;C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-    <ClCompile Include="..\numericalFlux.cpp" />
-    <ClCompile Include="..\sandbox.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
