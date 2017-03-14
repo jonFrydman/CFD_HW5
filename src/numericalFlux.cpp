@@ -144,4 +144,19 @@ vector<double> SouthFlux_AV(grid &grd,  vector<cellState> &stencil){
     return FluxAV;
 }
 
+vector<double> AirfoilFlux(grid & grd, vector< vector<cellState> > cellset, int i) {
+
+	vector<double> FoilFlux(4, 0.0);
+
+	double Pboundary;
+
+	Pboundary = 3.0 / 2 * cellset[i][0].P() - 1.0 / 2 * cellset[i][1].P();// Linear extrapolation of pressure. See p 21 of stanford
+
+	FoilFlux[0] = 0;
+	FoilFlux[2] = Pboundary*grd.xSnorm[i][0];
+	FoilFlux[3] = Pboundary*grd.ySnorm[i][0];
+	FoilFlux[4] = 0;
+
+	return FoilFlux;
+}
 
