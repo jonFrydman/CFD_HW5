@@ -1,3 +1,4 @@
+#include "integration.h"
 #include "cellState.h"
 #include "grid.h"
 #include <vector>
@@ -13,24 +14,24 @@ vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i
     std::vector<double> WFAV(4, 0.0);
 
     if(j>=2 && j<grd.M-4){ //if away from the airfoil and the airfoil boundary, use artificial viscocity
-        NFAV = NorthFlux_AV(grd, stencilNS(grd,i,j));
-        SFAV = SouthFlux_AV(grd, stencilNS(grd,i,j));
+        NFAV = NorthFlux_AV(grd, stencilNS(grd, cellset, i, j));
+        SFAV = SouthFlux_AV(grd, stencilNS(grd, cellset, i, j));
     }
     else if(j==0){ //at airfoil boundary airfoil case, no AV
-        NFAV = NorthFlux(grd, stencilNS(grd,i,j));
-        SFAV = AirfoilFlux(grd, i);
+        NFAV = NorthFlux(grd, stencilNS(grd, cellset, i, j));
+        SFAV = AirfoilFlux(grd, cellset, i);
     }
     else if(j==grd.M-2){
-        NFAV = InletOutletFlux(grd, i);
-        SFAV = SorthFlux(grd, stencilNS(grd,i,j));
+       // NFAV = InletOutletFlux(grd, i);
+        SFAV = SouthFlux(grd, stencilNS(grd, cellset,i,j));
     }
     else{ //near boundaries assume AV=0
-        NFAV = NorthFlux(grd, stencilNS(grd,i,j));
-        SFAV = SorthFlux(grd, stencilNS(grd,i,j));
+        NFAV = NorthFlux(grd, stencilNS(grd, cellset, i, j));
+        SFAV = SouthFlux(grd, stencilNS(grd, cellset, i, j));
     }
     //AV always on in the East/West direction
-    EFAV = EastFlux_AV(grd, stencilEW(grd,i,j)) ;
-    WFAV = WestFlux_AV(grd, stencilEW(grd,i,j));
+    EFAV = EastFlux_AV(grd, stencilEW(grd, cellset,i,j)) ;
+    WFAV = WestFlux_AV(grd, stencilEW(grd, cellset, i, j));
 
     RESIDUALS[0] = NFAV[0] - SFAV[0] + EFAV[0] - WFAV[0];
     RESIDUALS[1] = NFAV[1] - SFAV[1] + EFAV[1] - WFAV[1];
@@ -86,7 +87,7 @@ vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset,
     return cellsetPlus;
 }
 
-vector<cellState> stencilEW(vector< vector<cellState> > cellset, int i, int j){
+vector<cellState> stencilEW(grid & grd, vector< vector<cellState> > & cellset, int i, int j){
     vector<cellState> stencil(7);
 
     if(i+3<cellset.size() && i-3 >=0){//Interior stencil
@@ -117,7 +118,7 @@ vector<cellState> stencilEW(vector< vector<cellState> > cellset, int i, int j){
     return stencil;
 }
 
-vector<cellState> stencilNS(vector< vector<cellState> > cellset, int i, int j){
+vector<cellState> stencilNS(grid & grd, vector< vector<cellState> > & cellset, int i, int j){
     vector<cellState> stencil(7);
     if(j+3<cellset[0].size() && j-3 >=0){//Interior stencil
         for(int n=0; n<7; n++){
@@ -137,7 +138,7 @@ vector<cellState> stencilNS(vector< vector<cellState> > cellset, int i, int j){
             }
         }
     }
-    else if(ij-3 <0){ //Stencil near the airfoil
+    else if(j-3 <0){ //Stencil near the airfoil
         // AIRFOIL stencil
         int cnt=i+3;
         bool turnaround=false;

@@ -14,4 +14,7 @@ double Tau(grid &grd, cellState cell, double CFL);
 vector<double> AlphaRK();
 vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset, double CFL);
 
+vector<cellState> stencilEW(grid & grd, vector< vector<cellState> > & cellset, int i, int j);
+vector<cellState> stencilNS(grid & grd, vector< vector<cellState> > & cellset, int i, int j);
+
 #endif // INTEGRATION_H_INCLUDED

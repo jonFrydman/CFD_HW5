@@ -1,22 +1,13 @@
-﻿  sandbox.cpp
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp(102): warning C4018: '<': signed/unsigned mismatch
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp(107): warning C4018: '>=': signed/unsigned mismatch
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp(112): warning C4018: '>=': signed/unsigned mismatch
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp(132): warning C4018: '<': signed/unsigned mismatch
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp(137): warning C4018: '>': signed/unsigned mismatch
-  numericalFlux.cpp
-  integration.cpp
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(16): error C3861: 'stencilNS': identifier not found
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(17): error C3861: 'stencilNS': identifier not found
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(20): error C3861: 'stencilNS': identifier not found
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(21): error C2660: 'AirfoilFlux': function does not take 2 arguments
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(24): error C3861: 'InletOutletFlux': identifier not found
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(25): error C3861: 'stencilNS': identifier not found
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(25): error C3861: 'SorthFlux': identifier not found
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(28): error C3861: 'stencilNS': identifier not found
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(29): error C3861: 'stencilNS': identifier not found
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(29): error C3861: 'SorthFlux': identifier not found
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(32): error C3861: 'stencilEW': identifier not found
-c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(33): error C3861: 'stencilEW': identifier not found
-  eulerFlux.cpp
-  Generating Code...
+﻿  integration.cpp
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(93): warning C4018: '<': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(98): warning C4018: '>=': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(103): warning C4018: '>=': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(123): warning C4018: '<': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(128): warning C4018: '>': signed/unsigned mismatch
+integration.obj : error LNK2019: unresolved external symbol "class std::vector<double,class std::allocator<double> > __cdecl NorthFlux(class grid &,class std::vector<class cellState,class std::allocator<class cellState> > &)" (?NorthFlux@@YA?AV?$vector@NV?$allocator@N@std@@@std@@AAVgrid@@AAV?$vector@VcellState@@V?$allocator@VcellState@@@std@@@2@@Z) referenced in function "class std::vector<double,class std::allocator<double> > __cdecl Residuals(class grid &,class std::vector<class std::vector<class cellState,class std::allocator<class cellState> >,class std::allocator<class std::vector<class cellState,class std::allocator<class cellState> > > > &,int,int)" (?Residuals@@YA?AV?$vector@NV?$allocator@N@std@@@std@@AAVgrid@@AAV?$vector@V?$vector@VcellState@@V?$allocator@VcellState@@@std@@@std@@V?$allocator@V?$vector@VcellState@@V?$allocator@VcellState@@@std@@@std@@@2@@2@HH@Z)
+numericalFlux.obj : error LNK2001: unresolved external symbol "class std::vector<double,class std::allocator<double> > __cdecl NorthFlux(class grid &,class std::vector<class cellState,class std::allocator<class cellState> > &)" (?NorthFlux@@YA?AV?$vector@NV?$allocator@N@std@@@std@@AAVgrid@@AAV?$vector@VcellState@@V?$allocator@VcellState@@@std@@@2@@Z)
+integration.obj : error LNK2019: unresolved external symbol "class std::vector<double,class std::allocator<double> > __cdecl SouthFlux(class grid &,class std::vector<class cellState,class std::allocator<class cellState> > &)" (?SouthFlux@@YA?AV?$vector@NV?$allocator@N@std@@@std@@AAVgrid@@AAV?$vector@VcellState@@V?$allocator@VcellState@@@std@@@2@@Z) referenced in function "class std::vector<double,class std::allocator<double> > __cdecl Residuals(class grid &,class std::vector<class std::vector<class cellState,class std::allocator<class cellState> >,class std::allocator<class std::vector<class cellState,class std::allocator<class cellState> > > > &,int,int)" (?Residuals@@YA?AV?$vector@NV?$allocator@N@std@@@std@@AAVgrid@@AAV?$vector@V?$vector@VcellState@@V?$allocator@VcellState@@@std@@@std@@V?$allocator@V?$vector@VcellState@@V?$allocator@VcellState@@@std@@@std@@@2@@2@HH@Z)
+numericalFlux.obj : error LNK2001: unresolved external symbol "class std::vector<double,class std::allocator<double> > __cdecl SouthFlux(class grid &,class std::vector<class cellState,class std::allocator<class cellState> > &)" (?SouthFlux@@YA?AV?$vector@NV?$allocator@N@std@@@std@@AAVgrid@@AAV?$vector@VcellState@@V?$allocator@VcellState@@@std@@@2@@Z)
+numericalFlux.obj : error LNK2019: unresolved external symbol "class std::vector<double,class std::allocator<double> > __cdecl EastFlux(class grid &,class std::vector<class cellState,class std::allocator<class cellState> > &)" (?EastFlux@@YA?AV?$vector@NV?$allocator@N@std@@@std@@AAVgrid@@AAV?$vector@VcellState@@V?$allocator@VcellState@@@std@@@2@@Z) referenced in function "class std::vector<double,class std::allocator<double> > __cdecl EastFlux_AV(class grid &,class std::vector<class cellState,class std::allocator<class cellState> > &)" (?EastFlux_AV@@YA?AV?$vector@NV?$allocator@N@std@@@std@@AAVgrid@@AAV?$vector@VcellState@@V?$allocator@VcellState@@@std@@@2@@Z)
+numericalFlux.obj : error LNK2019: unresolved external symbol "class std::vector<double,class std::allocator<double> > __cdecl WestFlux(class grid &,class std::vector<class cellState,class std::allocator<class cellState> > &)" (?WestFlux@@YA?AV?$vector@NV?$allocator@N@std@@@std@@AAVgrid@@AAV?$vector@VcellState@@V?$allocator@VcellState@@@std@@@2@@Z) referenced in function "class std::vector<double,class std::allocator<double> > __cdecl WestFlux_AV(class grid &,class std::vector<class cellState,class std::allocator<class cellState> > &)" (?WestFlux_AV@@YA?AV?$vector@NV?$allocator@N@std@@@std@@AAVgrid@@AAV?$vector@VcellState@@V?$allocator@VcellState@@@std@@@2@@Z)
+C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\Project1\Debug\Project1.exe : fatal error LNK1120: 4 unresolved externals
