@@ -97,7 +97,7 @@ vector<double> SouthJamVisc(grid &grd,  vector<cellState> &stencil) {
     // is equivilent to return GenericJamesonViscocity(grd, cellset, i, j-1, 0, 1)
 }
 
-vector<double> EastFlux_AV(grid &grd,  vector<cellState> &stencil){
+vector<double> EastFlux_AV(grid &grd,  vector<cellState> &cellset){
 
     vector<double> EFlux = EastFlux(grd,cellset,i,j);
     vector<double> EJAV = EastJamVisc(grd, cellset,i,j);

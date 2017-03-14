@@ -1,4 +1,9 @@
 ﻿  sandbox.cpp
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\sandbox.cpp(91): warning C4018: '<': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\sandbox.cpp(96): warning C4018: '>': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\sandbox.cpp(101): warning C4018: '>=': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\sandbox.cpp(121): warning C4018: '<': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\sandbox.cpp(126): warning C4018: '>': signed/unsigned mismatch
   numericalFlux.cpp
 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(102): error C2065: 'cellset': undeclared identifier
 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(102): error C2065: 'i': undeclared identifier
@@ -6,5 +11,4 @@ c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(102): error
 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(103): error C2065: 'cellset': undeclared identifier
 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(103): error C2065: 'i': undeclared identifier
 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\numericalflux.cpp(103): error C2065: 'j': undeclared identifier
-  eulerFlux.cpp
   Generating Code...
