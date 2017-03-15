@@ -19,14 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\eulerFlux.cpp" />
-    <ClCompile Include="..\numericalFlux.cpp" />
-    <ClCompile Include="..\sandbox.cpp" />
+    <ClCompile Include="..\src\eulerFlux.cpp" />
+    <ClCompile Include="..\src\integration.cpp" />
+    <ClCompile Include="..\src\numericalFlux.cpp" />
+    <ClCompile Include="..\src\sandbox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cellState.h" />
     <ClInclude Include="..\include\eulerFlux.h" />
+    <ClInclude Include="..\include\eulerFluxRelations.h" />
     <ClInclude Include="..\include\grid.h" />
+    <ClInclude Include="..\include\integration.h" />
     <ClInclude Include="..\include\numericalFlux.h" />
     <ClInclude Include="..\include\referenceParameters.h" />
   </ItemGroup>
@@ -81,7 +84,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <SourcePath>C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5;$(SourcePath)</SourcePath>
+    <SourcePath>C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\src;C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5;$(SourcePath)</SourcePath>
     <IncludePath>C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5;C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

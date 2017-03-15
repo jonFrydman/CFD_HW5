@@ -9,21 +9,20 @@
 
 using namespace std;
 
-double nu_max(grid &grd, vector< vector<cellState> > &cellset,int i, int j, int delta_i, int delta_j);
-vector<double> GenericJamesonViscocity(grid &grd, vector< vector<cellState> > &cellset,int i, int j, int delta_i, int delta_j);
-vector<double> NorthJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> SouthJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> EastJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> WestJamVisc(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
+double nu_max(vector<cellState> stencil);
 
-vector<double> NorthFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> SouthFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> EastFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
-vector<double> WestFlux_AV(grid &grd, vector< vector<cellState> > &cellset,int i, int j);
+vector<double> GenericJamesonViscocity(grid &grd, vector<cellState> &stencil);
+vector<double> EastJamVisc(grid &grd,  vector<cellState> &stencil);
+vector<double> WestJamVisc(grid &grd,  vector<cellState> &stencil);
+vector<double> NorthJamVisc(grid &grd,  vector<cellState> &stencil);
+vector<double> SouthJamVisc(grid &grd,  vector<cellState> &stencil);
 
-vector<double> Residuals(grid &grd, vector< vector<cellState> > &cellset,int i, int j, double CFL);
-vector<double> AlphaRK();
-double Tau(grid &grd, vector< vector<cellState> > &cellset, int i, int j, double CFL);
+vector<double> EastFlux_AV(grid &grd,  vector<cellState> &stencil);
+vector<double> WestFlux_AV(grid &grd,  vector<cellState> &stencil);
+vector<double> NorthFlux_AV(grid &grd,  vector<cellState> &stencil);
+vector<double> SouthFlux_AV(grid &grd,  vector<cellState> &stencil);
 
-vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset, double CFL);
+vector<double> AirfoilFlux(grid & grd, vector< vector<cellState> > cellset, int i);
+vector<double> InletOutletFlux(grid &grd, vector< vector<cellState> > &cellset, int i);
+
 #endif // NUMERICALFLUX_H_INCLUDED

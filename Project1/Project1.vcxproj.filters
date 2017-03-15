@@ -15,13 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\eulerFlux.cpp">
+    <ClCompile Include="..\src\eulerFlux.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\numericalFlux.cpp">
+    <ClCompile Include="..\src\integration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\sandbox.cpp">
+    <ClCompile Include="..\src\numericalFlux.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sandbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,7 +35,13 @@
     <ClInclude Include="..\include\eulerFlux.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\eulerFluxRelations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\integration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\numericalFlux.h">
