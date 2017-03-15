@@ -43,7 +43,8 @@ vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i
     RESIDUALS[1] = NFAV[1] - SFAV[1] + EFAV[1] - WFAV[1];
     RESIDUALS[2] = NFAV[2] - SFAV[2] + EFAV[2] - WFAV[2];
     RESIDUALS[3] = NFAV[3] - SFAV[3] + EFAV[3] - WFAV[3];
-    return RESIDUALS;
+	
+	return RESIDUALS;
 }
 
 double Tau(grid &grd, cellState cell, double CFL){

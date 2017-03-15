@@ -89,7 +89,7 @@ int main(){
 		fout << endl << "TEXT X = " << grd.N - 1 << ", Y = " << grd.M - 1 << ", T = \"Timestep = " << t << " \", F = COURIER, CS = FRAME, H = 2, ZN = " << t << endl << endl;
 
 
-		system("pause");
+		//system("pause");
         cellset = RK4(grd, cellset, CFL);
 
     }

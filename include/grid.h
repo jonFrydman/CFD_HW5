@@ -60,22 +60,21 @@ class grid{
             for(int i=0; i<N; i++){
                 //read all data entries except the last in the line (the last line is the only one that doesnt have a comma at the end of it)
 
-				// for fucks sake. Some of the grid points were integers!!!! 3AM frustration brought to you by Mike Wennerstrom
+				// for fucks sake. Some of the grid points were negative zeros!!!! 3AM frustration brought to you by Mike Wennerstrom
                 for(int j=0; j<M-1; j++){
                     getline(xfile,readin,',');
                     xCorner[i][j]=atof(readin.c_str());
                     getline(yfile,readin,',');
-                    yCorner[i][j]=atof(readin.c_str());
+                    yCorner[i][j]= atof(readin.c_str());
                 }
                 getline(xfile,readin);
                 xCorner[i][M-1]=atof(readin.c_str());
                 getline(yfile,readin);
-                yCorner[i][M-1]=atof(readin.c_str());
+                yCorner[i][M-1]= atof(readin.c_str());
             }
             xfile.close();
             yfile.close();
 
-			std::cout << yCorner[0][63];
         }
         void defineCenterPoints(){ //interpolate cell centers
             xCenter.resize(N-1, std::vector<double>(M-1));
@@ -191,7 +190,7 @@ class grid{
 
 			}
 			
-			//To get the boundary values for these s's along the cells in i = 127. Note that the iplus i + 1 values are replaced with 0
+			//To get the boundary values for these s's along the cells in j = 63.
 			for (int i = 0; i < N - 1; i++) {
 
 				int j = M - 2;

@@ -20,14 +20,15 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="eulerFlux.cpp" />
 		<Unit filename="include/cellState.h" />
 		<Unit filename="include/eulerFlux.h" />
 		<Unit filename="include/grid.h" />
 		<Unit filename="include/numericalFlux.h" />
 		<Unit filename="include/referenceParameters.h" />
-		<Unit filename="numericalFlux.cpp" />
-		<Unit filename="sandbox.cpp" />
+		<Unit filename="src/eulerFlux.cpp" />
+		<Unit filename="src/integration.cpp" />
+		<Unit filename="src/numericalFlux.cpp" />
+		<Unit filename="src/sandbox.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
