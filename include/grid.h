@@ -24,6 +24,7 @@ class grid{
         vec2D xCorner, yCorner, xCenter, yCenter;
         vec2D xSside, ySside, xWside, yWside;
         vec2D xSnorm, ySnorm, xWnorm, yWnorm;
+        vec2D xSdeltas, ySdeltas, xWdeltas, yWdeltas;
         vec2D xInorm, yInorm, xJnorm, yJnorm; //the centered, averaged normals
         vec2D area;
         int N, M; //number of points in the xi, and eta directions
@@ -123,6 +124,23 @@ class grid{
                 double Slength=sqrt(pow(xSside[i][M-1],2)+pow(ySside[i][M-1],2));
                 ySnorm[i][M-1]=-(xCorner[i+1][M-1]-xCorner[i][M-1])/Slength;
                 xSnorm[i][M-1]=(yCorner[i+1][M-1]-yCorner[i][M-1])/Slength;
+            }
+        }
+        void defineDeltaS(){
+            xSdeltas.resize(N-1, std::vector<double>(M));
+            ySdeltas.resize(N-1, std::vector<double>(M));
+            xWdeltas.resize(N-1, std::vector<double>(M-1));
+            yWdeltas.resize(N-1, std::vector<double>(M-1));
+            for(int i=0; i<N-1; i++){
+                for(int j=0; j<M-1; j++){
+                    ySdeltas[i][j]=-(xCorner[i+1][j]-xCorner[i][j]);
+                    xSdeltas[i][j]=(yCorner[i+1][j]-yCorner[i][j]);
+                    yWdeltas[i][j]=(xCorner[i][j+1]-xCorner[i][j]);
+                    xWdeltas[i][j]=-(yCorner[i][j+1]-yCorner[i][j]);
+                }
+                double Slength=sqrt(pow(xSside[i][M-1],2)+pow(ySside[i][M-1],2));
+                ySdeltas[i][M-1]=-(xCorner[i+1][M-1]-xCorner[i][M-1]);
+                xSdeltas[i][M-1]=(yCorner[i+1][M-1]-yCorner[i][M-1]);
             }
         }
         void defineIJNormals(){
