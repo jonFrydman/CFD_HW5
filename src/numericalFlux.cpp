@@ -160,3 +160,41 @@ vector<double> AirfoilFlux(grid & grd, vector< vector<cellState> > cellset, int 
 	return FoilFlux;
 }
 
+vector<double InletOutletFlux(grid &grd,  vector< vector<cellState> > &cellset, int i){
+    //Reference values (we should maybe find a less janky way of getting these in here)
+    double M_ref=0.8;
+    double rho_ref=1.293; // Kg/m^3
+    double P_ref=101325;// Pa
+    double c_ref=sqrt(gamma*P_ref/rho_ref);
+
+    double Rplus, Rminus, ubnorm,ubtang, ubx, uby;
+    vector<double> FSTAR(4,0.0);
+    vector<double> GSTAR(4,0.0);
+    int last=grd.M-1;
+    double gamma=cellset{i][last].gamma();
+    double normal_speed=cellset[i][last].U()*grd.xSnorm[i][last] + cellset[i][last].V()*grd.ySnorm[i][last];
+
+    if(normal_speed >=0){ //Outlet
+        Rplus=normal_speed+2*cellset[i][last].C()/(gamma-1);
+        Rminus=M_ref*c_ref*grd.xSnorm[i][last]; //physical outlet velcity dotted with the normal vector (out outlet velocity is only in the x-driection)
+        ubnorm=(Rplus+Rminus)/2; //normal component of velocity
+        ubtang=cellState[i][j].U()*grd.ySnorm[i][last]-cellState[i][j].V()*grd.xSnorm[i][last]; //tangential component
+        ubx = (ubnorm-ubtang)*grd.xSnorm[i][last];
+        uby = (ubnorm+ubtang)*grd.ySnorm[i][last];
+    }
+    else{//inlet
+        ubx=M_ref*c_ref; //X-speed is at the mach speed, ignoring ferrante's wild notions
+        uby=0;
+    }
+    FSTAR[0]= rho_ref*ubx;
+    FSTAR[1]= rho_ref*power(ubx,2)+P_ref;
+    FSTAR[2]= rho_ref*ubx*uby;
+    FSTAR[3]= rho_ref*ubx*(gamma/(gamma-1)*P_ref/rho_ref+pow(ubx,2)/2+pow(uby,2)/2);
+
+    GSTAR[0]= rho_ref*uby;
+    GSTAR[1]= rho_ref*ubx*uby;
+    GSTAR[2]= rho_ref*power(uby,2)+P_ref;
+    GSTAR[3]= rho_ref*uby*(gamma/(gamma-1)*P_ref/rho_ref+pow(ubx,2)/2+pow(uby,2)/2);
+
+    return outerFlux;
+}
