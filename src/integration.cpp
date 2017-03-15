@@ -4,7 +4,7 @@
 #include <vector>
 #include <cmath>
 #include <numericalFlux.h>
-
+using namespace std;
 vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i, int j){
 
     std::vector<double> RESIDUALS(4, 0.0);
@@ -13,7 +13,7 @@ vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i
     std::vector<double> EFAV(4, 0.0);
     std::vector<double> WFAV(4, 0.0);
 
-	std::cout << i << ' ' << j <<endl;
+	//std::cout << i << ' ' << j <<endl;
 
     vector<cellState> ns_stencil=stencilNS(grd, cellset, i, j);
     vector<cellState> ew_stencil=stencilEW(grd, cellset, i, j);
@@ -26,10 +26,12 @@ vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i
         SFAV = AirfoilFlux(grd, cellset, i);
     }
     else if(j==grd.M-2){
-
+        cout << "OuterFlux:\t i = " << i << "\n";
         NFAV = InletOutletFlux(grd, cellset, i);
         SFAV = SouthFlux(grd, ns_stencil);
-    
+//        cout << "NFAV[0]:\t" << NFAV[0] << "\t" << "NFAV[1]:\t" << NFAV[1] << "\t" << "NFAV[2]:\t" << NFAV[2] << "\t" << "NFAV[3]:\t" << NFAV[3] << "\n";
+//        cout << "SFAV[0]:\t" << SFAV[0] << "\t" << "SFAV[1]:\t" << SFAV[1] << "\t" << "SFAV[2]:\t" << SFAV[2] << "\t" << "SFAV[3]:\t" << SFAV[3] << "\n";
+//        system("pause");
 	}
     else{ //near boundaries assume AV=0
         NFAV = NorthFlux(grd, ns_stencil);
@@ -43,7 +45,7 @@ vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i
     RESIDUALS[1] = NFAV[1] - SFAV[1] + EFAV[1] - WFAV[1];
     RESIDUALS[2] = NFAV[2] - SFAV[2] + EFAV[2] - WFAV[2];
     RESIDUALS[3] = NFAV[3] - SFAV[3] + EFAV[3] - WFAV[3];
-	
+
 	return RESIDUALS;
 }
 
@@ -52,9 +54,9 @@ double Tau(grid &grd, cellState cell, double CFL){
     int j= cell.j();
     double denominatorI = (cell.U()+cell.C())*grd.xInorm[i][j] + (cell.V()+cell.C())*grd.yInorm[i][j]; //Yikes, Inorm isn't calculated for 127??
     double denominatorJ = (cell.U()+cell.C())*grd.xJnorm[i][j] + (cell.V()+cell.C())*grd.yJnorm[i][j];
-    
+
 	double TAU = CFL*grd.area[i][j] / (abs(denominatorI) + abs(denominatorJ));
-	
+
 	return TAU;
 }
 
@@ -83,7 +85,7 @@ vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset,
     //loop through the whole thing 4 times! Nk*Ni*Nj, this way each pseudo timestep residual (R1,R2, etc) is based on fluxes from neighbors on that pseudotime. Otherwise there is the inclusion of fluxes that are old since Fstar is 1/2(fi + fi+1).
     for (int k = 0; k<4; k++) {
         cellsetPrev = cellsetPlus;
-            for(int j=0; j<grd.M-1; j++) { // not sure why i was looped first. 
+            for(int j=0; j<grd.M-1; j++) { // not sure why i was looped first.
 				for (int i = 0; i<grd.N - 1; i++) {
 				RESIDUALS = Residuals(grd, cellsetPrev, i, j);
 
@@ -124,7 +126,7 @@ vector<cellState> stencilEW(grid & grd, vector< vector<cellState> > & cellset, i
         int n=6;
         while(n<7 && n>-1){ // Added -1 term to break the loop
             stencil[n--]=cellset[cnt--][j]; //I'm not sure n-- accounts for stencil[0] or at i=0 since stencil[2] = cellset[128][j] => nan Since cell 128 is a ghost cell
-            if(cnt<0){ 
+            if(cnt<0){
                 cnt=cellset.size()-2; // ************** Changed this from cnt>=cellset.size()-1 so the stencil won't reference cellset[128][j], it will reference cellset[127]
             }
         }
@@ -134,8 +136,8 @@ vector<cellState> stencilEW(grid & grd, vector< vector<cellState> > & cellset, i
 
 vector<cellState> stencilNS(grid & grd, vector< vector<cellState> > & cellset, int i, int j){
     vector<cellState> stencil(7);
-    
-	if(j+3<cellset[0].size() && j-3 >=0){//Interior stencil 
+
+	if(j+3<cellset[0].size() && j-3 >=0){//Interior stencil
         for(int n=0; n<7; n++){
             stencil[n]=cellset[i][j+n-3];
         }
