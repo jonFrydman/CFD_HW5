@@ -1,6 +1,8 @@
 #include<iostream>
 #include<fstream>
 #include "referenceParameters.h"
+#include "integration.h"
+#include "eulerFlux.h"
 #include "cellState.h"
 #include "grid.h"
 #include "numericalFlux.h"
@@ -40,12 +42,12 @@ int main(){
 
 	cout << "Please make the console full screen"<<endl;
 	system("pause");
-	/*
-    for (int t=0 ; t<100; t++){
+	
+    for (int t=0 ; t<3; t++){
 
         cout << "Time Step:\t"<< t << "\t";
         cout << "Cell Velocity: <"<<cellset[10][10].U() <<", "<<cellset[10][10].V()<<">\tPressure: "<<cellset[10][10].P();
-        cout<<"\tCell Tau: "<< Tau(grd,cellset,10,10,CFL)<<"\t";
+        cout<<"\tCell Tau: "<< Tau(grd,cellset[10][10],CFL)<<"\t";
         cout<<"\t" << "Energy: "<<cellset[10][10].rhoE()<<"\t" << "Entropy: "<< cellset[10][10].S() << "\t" << "Temp: " << cellset[10][10].T() << "\t" << "Enthalpy: " << cellset[10][10].H()<<"\t"
         <<"Expected %P rise at front of airfoil: "<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
         cout << endl;
@@ -53,32 +55,32 @@ int main(){
         cellset = RK4(grd, cellset, CFL);
         system("pause");
     }
-*/
-	fstream fout;
+
+	ofstream fout;
 
 	fout.open("GridFile.dat");
 	fout << "TITLE = NACA GRID \n";
 	fout << "FILETYPE = GRID \n";
 	fout << "VARIABLES = \"X\", \"Y\" \n";
-	fout << "ZONE I=" << grd.N - 2 << " , J=" << grd.M - 2 << ", F=POINT \n";
-	for (int j = 0; j < grd.M - 1; j++) {
-		for (int i = 0; i < grd.N - 1; i++) {
+	fout << "ZONE I=" << grd.N << " , J=" << grd.M << ", F=POINT \n";
+	for (int j = 0; j < grd.M; j++) {
+		for (int i = 0; i < grd.N; i++) {
 
-			fout << grd.xCorner[i][j] << ' ' << grd.xCorner[i][j] << std::endl;
+			fout << grd.xCorner[i][j] << ' ' << grd.yCorner[i][j] << std::endl;
 
 		}
 	}
 	fout.close();
 
 	fout.open("SolutionFile.dat");
-	fout << "TITLE = AIRFOIL SOLUTION VALUES \n";
-	fout << "FILETYPE = SOLUTION \n";
-	fout << "VARIABLES = \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\" \n";
-	fout << "ZONE I = " << grd.N - 2 << " , J = " << grd.M - 2 << " , K = " << 6 << ", F=POINT \n";
+	fout << "TITLE = AIRFOIL CELL CENTERED SOLUTION VALUES \n";
+	//fout << "FILETYPE = SOLUTION \n";
+	fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\" \n";
+	fout << "ZONE T = \"CELL CENTERS\", I = " << grd.N - 1 << " , J = " << grd.M - 1 << ", F=POINT \n";
 	for (int j = 0; j < grd.M - 1; j++) {
 		for (int i = 0; i < grd.N - 1; i++) {
 
-			fout << cellset[i][j].speed() << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ' << cellset[i][j].H()
+			fout << grd.xCenter[i][j] << ' ' << grd.yCenter[i][j] << ' ' << cellset[i][j].speed() << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ' << cellset[i][j].H()
 				<< ' '<< cellset[i][j].S() << ' ' << cellset[i][j].U() << std::endl;
 
 		}

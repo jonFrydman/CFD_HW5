@@ -23,5 +23,6 @@ vector<double> NorthFlux_AV(grid &grd,  vector<cellState> &stencil);
 vector<double> SouthFlux_AV(grid &grd,  vector<cellState> &stencil);
 
 vector<double> AirfoilFlux(grid & grd, vector< vector<cellState> > cellset, int i);
+vector<double> InletOutletFlux(grid &grd, vector< vector<cellState> > &cellset, int i);
 
 #endif // NUMERICALFLUX_H_INCLUDED
