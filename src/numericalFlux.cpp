@@ -170,7 +170,7 @@ vector<double> InletOutletFlux(grid &grd,  vector< vector<cellState> > &cellset,
     double Rplus, Rminus, ubnorm,ubtang, ubx, uby;
     vector<double> FSTAR(4,0.0);
     vector<double> GSTAR(4,0.0);
-    int last=grd.M-1;
+    int last=grd.M-2; // Last is actually M-2, unless we give cellset a ghost cell
     double gamma=cellset[i][last].gamma();
     double normal_speed=cellset[i][last].U()*grd.xSnorm[i][last] + cellset[i][last].V()*grd.ySnorm[i][last];
 

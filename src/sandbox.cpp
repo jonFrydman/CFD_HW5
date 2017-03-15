@@ -31,30 +31,6 @@ int main(){
 //        cout<<"\t\tCell Area:\t"<<grd.area[i][0]<<"\t\tAspect Ratio:\t"<<grd.xSside[i][0]/grd.xWside[i][0]<<"\t\tOrthogonality:\t"<<cos(grd.xWside[i][0]/grd.xSside[i][0])*180/pi<<" deg\n\n";
 //    }
     loadICs();
-//    cout << "Cell Velocity:\t<"<<cellset[10][10].U()<<", "<<cellset[10][10].V()<<">\t\tPressure:\t"<<cellset[10][10].P()<<"\n";
-//    cout << "Engergy:\t"<<cellset[10][10].rhoE()<<"\n";
-//    cout << "P_ref:\t"<<P_ref<<"\t\trhoE_ref:\t"<<rhoE_ref<<"\t\trhoU_ref:\t"<<rho_ref*speed_ref<<"\n";
-//
-//    cout << "Expected %P rise at front of airfoil:\t"<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
-//
-//    vector<double> test = EastFlux(grd, cellset, 10,10);
-//    cout<<"F*(AV)1:\t" << test[0] << "\t\tF*(AV)2:\t" << test[1] << "\t\tF*(AV)3:\t" << test[2] << "\t\tF*(AV)4:\t" << test[3];
-
-	cout << "Please make the console full screen"<<endl;
-	system("pause");
-	
-    for (int t=0 ; t<3; t++){
-
-        cout << "Time Step:\t"<< t << "\t";
-        cout << "Cell Velocity: <"<<cellset[10][10].U() <<", "<<cellset[10][10].V()<<">\tPressure: "<<cellset[10][10].P();
-        cout<<"\tCell Tau: "<< Tau(grd,cellset[10][10],CFL)<<"\t";
-        cout<<"\t" << "Energy: "<<cellset[10][10].rhoE()<<"\t" << "Entropy: "<< cellset[10][10].S() << "\t" << "Temp: " << cellset[10][10].T() << "\t" << "Enthalpy: " << cellset[10][10].H()<<"\t"
-        <<"Expected %P rise at front of airfoil: "<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
-        cout << endl;
-
-        cellset = RK4(grd, cellset, CFL);
-        system("pause");
-    }
 
 	ofstream fout;
 
@@ -72,25 +48,59 @@ int main(){
 	}
 	fout.close();
 
+//    cout << "Cell Velocity:\t<"<<cellset[10][10].U()<<", "<<cellset[10][10].V()<<">\t\tPressure:\t"<<cellset[10][10].P()<<"\n";
+//    cout << "Engergy:\t"<<cellset[10][10].rhoE()<<"\n";
+//    cout << "P_ref:\t"<<P_ref<<"\t\trhoE_ref:\t"<<rhoE_ref<<"\t\trhoU_ref:\t"<<rho_ref*speed_ref<<"\n";
+//
+//    cout << "Expected %P rise at front of airfoil:\t"<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
+//
+//    vector<double> test = EastFlux(grd, cellset, 10,10);
+//    cout<<"F*(AV)1:\t" << test[0] << "\t\tF*(AV)2:\t" << test[1] << "\t\tF*(AV)3:\t" << test[2] << "\t\tF*(AV)4:\t" << test[3];
+
+	cout << "Please make the console full screen"<<endl;
+	system("pause");
+	
 	fout.open("SolutionFile.dat");
-	fout << "TITLE = AIRFOIL CELL CENTERED SOLUTION VALUES \n";
 	//fout << "FILETYPE = SOLUTION \n";
-	fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\" \n";
-	fout << "ZONE T = \"CELL CENTERS\", I = " << grd.N - 1 << " , J = " << grd.M - 1 << ", F=POINT \n";
-	for (int j = 0; j < grd.M - 1; j++) {
-		for (int i = 0; i < grd.N - 1; i++) {
 
-			fout << grd.xCenter[i][j] << ' ' << grd.yCenter[i][j] << ' ' << cellset[i][j].speed() << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ' << cellset[i][j].H()
-				<< ' '<< cellset[i][j].S() << ' ' << cellset[i][j].U() << std::endl;
 
+    for (int t=0 ; t<3; t++){
+
+        cout << "Time Step:\t"<< t << "\t";
+        cout << "Cell Velocity: <"<<cellset[10][10].U() <<", "<<cellset[10][10].V()<<">\tPressure: "<<cellset[10][10].P();
+        cout<<"\tCell Tau: "<< Tau(grd,cellset[10][10],CFL)<<"\t";
+        cout<<"\t" << "Energy: "<<cellset[10][10].rhoE()<<"\t" << "Entropy: "<< cellset[10][10].S() << "\t" << "Temp: " << cellset[10][10].T() << "\t" << "Enthalpy: " << cellset[10][10].H()<<"\t"
+        <<"Expected %P rise at front of airfoil: "<<100*abs(P_ref-cellState(rho_ref,0,0,rhoE_ref,gamma,cv).P())/P_ref<<"%\n";
+        cout << endl;
+
+
+
+		fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\" \n";
+		fout << "ZONE T = \"CELL CENTERS AT TIMESTEP " << t << " \", I = " << grd.N - 1 << " , J = " << grd.M - 1 << ", F=POINT \n\n";
+		for (int j = 0; j < grd.M - 1; j++) {
+			for (int i = 0; i < grd.N - 1; i++) {
+
+				fout << grd.xCenter[i][j] << ' ' << grd.yCenter[i][j] << ' ' << cellset[i][j].speed() << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ' << cellset[i][j].H()
+					<< ' ' << cellset[i][j].S() << ' ' << cellset[i][j].U() << std::endl;
+
+			}
 		}
-	}
+
+		fout << endl << "TEXT X = " << grd.N - 1 << ", Y = " << grd.M - 1 << ", T = \"Timestep = " << t << " \", F = COURIER, CS = FRAME, H = 2, ZN = " << t << endl << endl;
+
+
+		system("pause");
+        cellset = RK4(grd, cellset, CFL);
+
+    }
+
 	fout.close();
 
 }
 
 void loadICs(){
-    cellset.resize(grd.N-1, std::vector<cellState>(grd.M-1));
+    cellset.resize(grd.N
+		, std::vector<cellState>(grd.M-1));
     for(int i=0; i<grd.N-1;i++){
         for(int j=0; j<grd.M-1;j++){
             cellset[i][j].redefine(rho_ref,rho_ref*M_ref*c_ref,0,rhoE_ref,gamma,cv,i,j);

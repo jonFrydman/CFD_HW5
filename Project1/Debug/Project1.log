@@ -1,3 +1,13 @@
-﻿  sandbox.cpp
-  Project1.vcxproj -> C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\Project1\Debug\Project1.exe
-  Project1.vcxproj -> C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\Project1\Debug\Project1.pdb (Partial PDB)
+﻿  eulerFlux.cpp
+  Generating Code...
+  Compiling...
+  sandbox.cpp
+  numericalFlux.cpp
+  integration.cpp
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(106): warning C4018: '<': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(111): warning C4018: '>=': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(116): warning C4018: '>=': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(137): warning C4018: '<': signed/unsigned mismatch
+c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp(142): warning C4018: '>=': signed/unsigned mismatch
+  Generating Code...
+LINK : fatal error LNK1168: cannot open C:\Users\Mike\Google Drive\Term 5\CFD\HW 5\CFD_HW5\Project1\Debug\Project1.exe for writing

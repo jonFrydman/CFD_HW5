@@ -20,6 +20,7 @@ class grid{
             defineSideNormals();
             defineAreas();
             defineIJNormals();
+			defineDeltaS();
         }
         vec2D xCorner, yCorner, xCenter, yCenter;
         vec2D xSside, ySside, xWside, yWside;
@@ -58,6 +59,8 @@ class grid{
 
             for(int i=0; i<N; i++){
                 //read all data entries except the last in the line (the last line is the only one that doesnt have a comma at the end of it)
+
+				// for fucks sake. Some of the grid points were integers!!!! 3AM frustration brought to you by Mike Wennerstrom
                 for(int j=0; j<M-1; j++){
                     getline(xfile,readin,',');
                     xCorner[i][j]=atof(readin.c_str());
@@ -71,6 +74,8 @@ class grid{
             }
             xfile.close();
             yfile.close();
+
+			std::cout << yCorner[0][63];
         }
         void defineCenterPoints(){ //interpolate cell centers
             xCenter.resize(N-1, std::vector<double>(M-1));
@@ -148,7 +153,7 @@ class grid{
             yInorm.resize(N-1, std::vector<double>(M-1));
             xJnorm.resize(N-1, std::vector<double>(M-1));
             yJnorm.resize(N-1, std::vector<double>(M-1));
-            for(int i=0; i<N-2; i++){
+            for(int i=0; i<N-2; i++){ // Altered to include row i = 127 and column j=63 instead of all zeros
                 for(int j=0; j<M-2; j++){
                     xInorm[i][j]=0.5*(xWnorm[i][j]+xWnorm[i+1][j]);
                     yInorm[i][j]=0.5*(yWnorm[i][j]+yWnorm[i+1][j]);
@@ -156,15 +161,65 @@ class grid{
                     yJnorm[i][j]=0.5*(ySnorm[i][j]+ySnorm[i][j+1]);
                 }
             }
-			//To get the boundary values for these s's, Snorm must be found at the extreme adge
-/*			for (int i = 0; i < N - 1; i++) {
 
-				xInorm[i][M-1] = 0.5*(xWnorm[i][j] + xWnorm[i + 1][j]);
-				yInorm[i][j] = 0.5*(yWnorm[i][j] + yWnorm[i + 1][j]);
-				xJnorm[i][j] = 0.5*(xSnorm[i][j] + xSnorm[i][j + 1]);
-				yJnorm[i][j] = 0.5*(ySnorm[i][j] + ySnorm[i][j + 1]);
+			//To get the boundary values for these s's along the cells in i = 127. Note that the iplus i + 1 values are replaced with 0
+			for (int j = 0; j < M - 2; j++) {
 
-			}*/
+				int i = N - 2;
+
+				double Slength = sqrt(pow(xSside[i][j], 2) + pow(ySside[i][j], 2));
+				double Slength_jplus = sqrt(pow(xSside[i][j+1], 2) + pow(ySside[i][j+1], 2));
+				double Wlength = sqrt(pow(xWside[i][j], 2) + pow(yWside[i][j], 2));
+				double Wlength_iplus = sqrt(pow(xWside[0][j], 2) + pow(yWside[0][j], 2));
+
+				double temp_ySnorm = -(xCorner[i + 1][j] - xCorner[i][j]) / Slength;
+				double temp_ySnorm_jplus = -(xCorner[i + 1][j+1] - xCorner[i][j+1]) / Slength_jplus;
+
+				double temp_xSnorm = (yCorner[i + 1][j] - yCorner[i][j]) / Slength;
+				double temp_xSnorm_jplus = (yCorner[i + 1][j+1] - yCorner[i][j+1]) / Slength_jplus;
+
+				double temp_yWnorm = (xCorner[i][j + 1] - xCorner[i][j]) / Wlength;
+				double temp_yWnorm_iplus = (xCorner[0][j + 1] - xCorner[0][j]) / Wlength_iplus;
+
+				double temp_xWnorm = -(yCorner[i][j + 1] - yCorner[i][j]) / Wlength;
+				double temp_xWnorm_iplus = -(yCorner[0][j + 1] - yCorner[0][j]) / Wlength_iplus;
+
+				xInorm[i][j] = 0.5*(temp_xWnorm + temp_xWnorm_iplus);
+				yInorm[i][j] = 0.5*(temp_yWnorm + temp_yWnorm_iplus);
+				xJnorm[i][j] = 0.5*(temp_xSnorm + temp_xSnorm_jplus);
+				yJnorm[i][j] = 0.5*(temp_ySnorm + temp_ySnorm_jplus);
+
+			}
+			
+			//To get the boundary values for these s's along the cells in i = 127. Note that the iplus i + 1 values are replaced with 0
+			for (int i = 0; i < N - 1; i++) {
+
+				int j = M - 2;
+
+				double Slength = sqrt(pow(xSside[i][j], 2) + pow(ySside[i][j], 2));
+				double Slength_jplus = sqrt(pow(xSside[i][j + 1], 2) + pow(ySside[i][j + 1], 2));
+				double Wlength = sqrt(pow(xWside[i][j], 2) + pow(yWside[i][j], 2));
+				double Wlength_iplus = sqrt(pow(xWside[0][j], 2) + pow(yWside[0][j], 2));
+
+				double temp_ySnorm = -(xCorner[i + 1][j] - xCorner[i][j]) / Slength;
+				double temp_ySnorm_jplus = -(xCorner[i + 1][j + 1] - xCorner[i][j + 1]) / Slength_jplus;
+
+				double temp_xSnorm = (yCorner[i + 1][j] - yCorner[i][j]) / Slength;
+				double temp_xSnorm_jplus = (yCorner[i + 1][j + 1] - yCorner[i][j + 1]) / Slength_jplus;
+
+				double temp_yWnorm = (xCorner[i][j + 1] - xCorner[i][j]) / Wlength;
+				double temp_yWnorm_iplus = (xCorner[0][j + 1] - xCorner[0][j]) / Wlength_iplus;
+
+				double temp_xWnorm = -(yCorner[i][j + 1] - yCorner[i][j]) / Wlength;
+				double temp_xWnorm_iplus = -(yCorner[0][j + 1] - yCorner[0][j]) / Wlength_iplus;
+
+				xInorm[i][j] = 0.5*(temp_xWnorm + temp_xWnorm_iplus);
+				yInorm[i][j] = 0.5*(temp_yWnorm + temp_yWnorm_iplus);
+				xJnorm[i][j] = 0.5*(temp_xSnorm + temp_xSnorm_jplus);
+				yJnorm[i][j] = 0.5*(temp_ySnorm + temp_ySnorm_jplus);
+
+			}
+
         }
 };
 
