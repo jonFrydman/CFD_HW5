@@ -120,10 +120,10 @@ class grid{
                 for(int j=0; j<M-1; j++){
                     double Slength=sqrt(pow(xSside[i][j],2)+pow(ySside[i][j],2));
                     double Wlength=sqrt(pow(xWside[i][j],2)+pow(yWside[i][j],2));
-                    ySnorm[i][j]=-(xCorner[i+1][j]-xCorner[i][j])/Slength;
-                    xSnorm[i][j]=(yCorner[i+1][j]-yCorner[i][j])/Slength;
-                    yWnorm[i][j]=(xCorner[i][j+1]-xCorner[i][j])/Wlength;
-                    xWnorm[i][j]=-(yCorner[i][j+1]-yCorner[i][j])/Wlength;
+                    ySnorm[i][j]=(xCorner[i+1][j]-xCorner[i][j])/Slength;
+                    xSnorm[i][j]=-(yCorner[i+1][j]-yCorner[i][j])/Slength;
+                    yWnorm[i][j]=-(xCorner[i][j+1]-xCorner[i][j])/Wlength;
+                    xWnorm[i][j]=(yCorner[i][j+1]-yCorner[i][j])/Wlength;
                 }
                 double Slength=sqrt(pow(xSside[i][M-1],2)+pow(ySside[i][M-1],2));
                 ySnorm[i][M-1]=-(xCorner[i+1][M-1]-xCorner[i][M-1])/Slength;
@@ -137,10 +137,10 @@ class grid{
             yWdeltas.resize(N-1, std::vector<double>(M-1));
             for(int i=0; i<N-1; i++){
                 for(int j=0; j<M-1; j++){
-                    ySdeltas[i][j]=-(xCorner[i+1][j]-xCorner[i][j]);
-                    xSdeltas[i][j]=(yCorner[i+1][j]-yCorner[i][j]);
-                    yWdeltas[i][j]=(xCorner[i][j+1]-xCorner[i][j]);
-                    xWdeltas[i][j]=-(yCorner[i][j+1]-yCorner[i][j]);
+                    ySdeltas[i][j]=(xCorner[i+1][j]-xCorner[i][j]);
+                    xSdeltas[i][j]=-(yCorner[i+1][j]-yCorner[i][j]);
+                    yWdeltas[i][j]=-(xCorner[i][j+1]-xCorner[i][j]);
+                    xWdeltas[i][j]=(yCorner[i][j+1]-yCorner[i][j]);
                 }
                 double Slength=sqrt(pow(xSside[i][M-1],2)+pow(ySside[i][M-1],2));
                 ySdeltas[i][M-1]=-(xCorner[i+1][M-1]-xCorner[i][M-1]);
@@ -189,7 +189,7 @@ class grid{
 				yJnorm[i][j] = 0.5*(temp_ySnorm + temp_ySnorm_jplus);
 
 			}
-			
+
 			//To get the boundary values for these s's along the cells in j = 63.
 			for (int i = 0; i < N - 1; i++) {
 
