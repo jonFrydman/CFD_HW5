@@ -66,18 +66,19 @@ void writeSolutionStep(int t){
     else{//if this is not the first time step just append to the existing file
         mode=ofstream::app;
     }
-	fout.open("SolutionFile.dat", mode);
+	fout.open("SolutionFile.d   at", mode);
 	if(!fout.good()){
         cout << "ERROR OPENING SOLUTION FILE\n";
 	}
 
-    fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\", \"Yvel\", \"F0\", \"G0\", \"rho\" \n";
+    fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\", \"Yvel\", \"F0\", \"G0\", \"rho\", \"nSx\", \"nSy\", \"nWx\", \"nWy\", \n";
     fout << "ZONE T = \"CELL CENTERS AT TIMESTEP " << t << " \", I = " << grd.N - 1 << " , J = " << grd.M - 1 << ", F=POINT \n\n";
-    for (int i = 0; i < grd.N - 1; i++) {
-        for (int j = 0; j < grd.M-1; j++) {
+    for (int j = 0; j < grd.M - 1; j++) {
+        for (int i = 0; i < grd.N-1; i++) {
             fout << grd.xCenter[i][j] << ' ' << grd.yCenter[i][j] << ' ' << cellset[i][j].speed() << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ';
             fout << cellset[i][j].H() << ' ' << cellset[i][j].S() << ' ' << cellset[i][j].U() << ' ' << cellset[i][j].V() << ' ';
-            fout << cellset[i][j].F1() << ' ' << cellset[i][j].G1() << ' ' << cellset[i][j].rho() << endl;
+            fout << cellset[i][j].F1() << ' ' << cellset[i][j].G1() << ' ' << cellset[i][j].rho() << ' ';
+            fout << grd.xSnorm[i][j] << ' ' << grd.ySnorm[i][j] << ' ' << grd.xWnorm[i][j] << ' ' << grd.yWnorm[i][j] << endl;
         }
     }
 //		for (int j = 0; j < grd.M - 1; j++) {
