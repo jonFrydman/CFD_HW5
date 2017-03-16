@@ -47,11 +47,17 @@ void writeGrid(){
 	fout.open("GridFile.dat");
 	fout << "TITLE = NACA GRID \n";
 	fout << "FILETYPE = GRID \n";
-	fout << "VARIABLES = \"X\", \"Y\" \n";
+	fout << "VARIABLES = \"X\", \"Y\", \"nSx\", \"nSy\", \"nWx\", \"nWy\" \n";
 	fout << "ZONE I=" << grd.N << " , J=" << grd.M << ", F=POINT \n";
 	for (int j = 0; j < grd.M; j++) {
 		for (int i = 0; i < grd.N; i++) {
-			fout << grd.xCorner[i][j] << ' ' << grd.yCorner[i][j] << std::endl;
+			fout << grd.xCorner[i][j] << ' ' << grd.yCorner[i][j] << ' ';
+			if(i!=grd.N-1){
+                fout << grd.xSnorm[i][j] << ' ' << grd.ySnorm[i][j] << ' ' << grd.xWnorm[i][j] << ' ' << grd.yWnorm[i][j] << endl;
+			}
+			else{ //replot the i=0 normal for i=N
+                fout << grd.xSnorm[0][j] << ' ' << grd.ySnorm[0][j] << ' ' << grd.xWnorm[0][j] << ' ' << grd.yWnorm[0][j] << endl;
+			}
 		}
 	}
 	fout.close();
@@ -71,14 +77,13 @@ void writeSolutionStep(int t){
         cout << "ERROR OPENING SOLUTION FILE\n";
 	}
 
-    fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\", \"Yvel\", \"F0\", \"G0\", \"rho\", \"nSx\", \"nSy\", \"nWx\", \"nWy\", \n";
+    fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\", \"Yvel\", \"F0\", \"G0\", \"rho\" \n";
     fout << "ZONE T = \"CELL CENTERS AT TIMESTEP " << t << " \", I = " << grd.N - 1 << " , J = " << grd.M - 1 << ", F=POINT \n\n";
     for (int j = 0; j < grd.M - 1; j++) {
         for (int i = 0; i < grd.N-1; i++) {
             fout << grd.xCenter[i][j] << ' ' << grd.yCenter[i][j] << ' ' << cellset[i][j].speed() << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ';
             fout << cellset[i][j].H() << ' ' << cellset[i][j].S() << ' ' << cellset[i][j].U() << ' ' << cellset[i][j].V() << ' ';
-            fout << cellset[i][j].F1() << ' ' << cellset[i][j].G1() << ' ' << cellset[i][j].rho() << ' ';
-            fout << grd.xSnorm[i][j] << ' ' << grd.ySnorm[i][j] << ' ' << grd.xWnorm[i][j] << ' ' << grd.yWnorm[i][j] << endl;
+            fout << cellset[i][j].F1() << ' ' << cellset[i][j].G1() << ' ' << cellset[i][j].rho() << endl;
         }
     }
 //		for (int j = 0; j < grd.M - 1; j++) {
