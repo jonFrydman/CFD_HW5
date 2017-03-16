@@ -1,5 +1,5 @@
-VARIABLES = "X", "Y", "xSds", "ySds", "xSnorm","ySnorm", "xWds", "yWds","xWnorm", "yWnorm" 
-ZONE T = "Grid normals 0 ", I = 128 , J = 64, F=POINT 
+VARIABLES = "X", "Y", "xSds", "ySds", "xSnorm","ySnorm", "xWdsSds", "yWds","xWnorm", "yWnorm" 
+ZONE T = "Grid normals ", I = 128 , J = 64, F=POINT 
 
 0.999675 -0.000312425 8.62e-05 -0.0006 0.142207 -0.989837 0 0.00035 0 0
 1.00073 -0.00093395 0.0011635 0 1 0 0 -0.00215 0 0

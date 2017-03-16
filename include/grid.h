@@ -108,7 +108,7 @@ class grid{
                     yWside[i][j]=abs(yCorner[i][j+1]-yCorner[i][j]);
                 }
                 xSside[i][M-1]=abs(xCorner[i+1][M-1]-xCorner[i][M-1]);
-                ySside[i][M-1]=abs(yCorner[i+1][M-1]-yCorner[i][M-1]);
+                ySside[i][M-1]=abs(yCorner[i+1][M-1]-yCorner[i][M-1]); // checked at 3/15 9pm
             }
         }
         void defineSideNormals(){
@@ -120,7 +120,7 @@ class grid{
                 for(int j=0; j<M-1; j++){
                     double Slength=sqrt(pow(xSside[i][j],2)+pow(ySside[i][j],2));
                     double Wlength=sqrt(pow(xWside[i][j],2)+pow(yWside[i][j],2));
-                    ySnorm[i][j]=(xCorner[i+1][j]-xCorner[i][j])/Slength;
+                    ySnorm[i][j]=(xCorner[i+1][j]-xCorner[i][j])/Slength; //checked 3/15 at 9pm
                     xSnorm[i][j]=-(yCorner[i+1][j]-yCorner[i][j])/Slength;
                     yWnorm[i][j]=-(xCorner[i][j+1]-xCorner[i][j])/Wlength;
                     xWnorm[i][j]=(yCorner[i][j+1]-yCorner[i][j])/Wlength;
@@ -143,8 +143,8 @@ class grid{
                     xWdeltas[i][j]=(yCorner[i][j+1]-yCorner[i][j]);
                 }
                 double Slength=sqrt(pow(xSside[i][M-1],2)+pow(ySside[i][M-1],2));
-                ySdeltas[i][M-1]=-(xCorner[i+1][M-1]-xCorner[i][M-1]);
-                xSdeltas[i][M-1]=(yCorner[i+1][M-1]-yCorner[i][M-1]);
+                ySdeltas[i][M-1]=(xCorner[i+1][M-1]-xCorner[i][M-1]); // fixed from y=-x, x=y to y=x and x=-y 3/15 9pm
+                xSdeltas[i][M-1]=-(yCorner[i+1][M-1]-yCorner[i][M-1]);
             }
         }
         void defineIJNormals(){
@@ -171,17 +171,17 @@ class grid{
 				double Wlength = sqrt(pow(xWside[i][j], 2) + pow(yWside[i][j], 2));
 				double Wlength_iplus = sqrt(pow(xWside[0][j], 2) + pow(yWside[0][j], 2));
 
-				double temp_ySnorm = -(xCorner[i + 1][j] - xCorner[i][j]) / Slength;
-				double temp_ySnorm_jplus = -(xCorner[i + 1][j+1] - xCorner[i][j+1]) / Slength_jplus;
+				double temp_ySnorm = (xCorner[i + 1][j] - xCorner[i][j]) / Slength;
+				double temp_ySnorm_jplus = (xCorner[i + 1][j+1] - xCorner[i][j+1]) / Slength_jplus;
 
-				double temp_xSnorm = (yCorner[i + 1][j] - yCorner[i][j]) / Slength;
-				double temp_xSnorm_jplus = (yCorner[i + 1][j+1] - yCorner[i][j+1]) / Slength_jplus;
+				double temp_xSnorm = -(yCorner[i + 1][j] - yCorner[i][j]) / Slength;
+				double temp_xSnorm_jplus = -(yCorner[i + 1][j+1] - yCorner[i][j+1]) / Slength_jplus;
 
-				double temp_yWnorm = (xCorner[i][j + 1] - xCorner[i][j]) / Wlength;
-				double temp_yWnorm_iplus = (xCorner[0][j + 1] - xCorner[0][j]) / Wlength_iplus;
+				double temp_yWnorm = -(xCorner[i][j + 1] - xCorner[i][j]) / Wlength;
+				double temp_yWnorm_iplus = -(xCorner[0][j + 1] - xCorner[0][j]) / Wlength_iplus;
 
-				double temp_xWnorm = -(yCorner[i][j + 1] - yCorner[i][j]) / Wlength;
-				double temp_xWnorm_iplus = -(yCorner[0][j + 1] - yCorner[0][j]) / Wlength_iplus;
+				double temp_xWnorm = (yCorner[i][j + 1] - yCorner[i][j]) / Wlength;
+				double temp_xWnorm_iplus = (yCorner[0][j + 1] - yCorner[0][j]) / Wlength_iplus;
 
 				xInorm[i][j] = 0.5*(temp_xWnorm + temp_xWnorm_iplus);
 				yInorm[i][j] = 0.5*(temp_yWnorm + temp_yWnorm_iplus);
@@ -200,17 +200,18 @@ class grid{
 				double Wlength = sqrt(pow(xWside[i][j], 2) + pow(yWside[i][j], 2));
 				double Wlength_iplus = sqrt(pow(xWside[0][j], 2) + pow(yWside[0][j], 2));
 
-				double temp_ySnorm = -(xCorner[i + 1][j] - xCorner[i][j]) / Slength;
-				double temp_ySnorm_jplus = -(xCorner[i + 1][j + 1] - xCorner[i][j + 1]) / Slength_jplus;
+				double temp_ySnorm = (xCorner[i + 1][j] - xCorner[i][j]) / Slength;
+				double temp_ySnorm_jplus = (xCorner[i + 1][j + 1] - xCorner[i][j + 1]) / Slength_jplus;
 
-				double temp_xSnorm = (yCorner[i + 1][j] - yCorner[i][j]) / Slength;
-				double temp_xSnorm_jplus = (yCorner[i + 1][j + 1] - yCorner[i][j + 1]) / Slength_jplus;
+				double temp_xSnorm = -(yCorner[i + 1][j] - yCorner[i][j]) / Slength;
+				double temp_xSnorm_jplus = -(yCorner[i + 1][j + 1] - yCorner[i][j + 1]) / Slength_jplus;
 
-				double temp_yWnorm = (xCorner[i][j + 1] - xCorner[i][j]) / Wlength;
-				double temp_yWnorm_iplus = (xCorner[0][j + 1] - xCorner[0][j]) / Wlength_iplus;
+				double temp_yWnorm = -(xCorner[i][j + 1] - xCorner[i][j]) / Wlength;
+				double temp_yWnorm_iplus = -(xCorner[0][j + 1] - xCorner[0][j]) / Wlength_iplus;
 
-				double temp_xWnorm = -(yCorner[i][j + 1] - yCorner[i][j]) / Wlength;
-				double temp_xWnorm_iplus = -(yCorner[0][j + 1] - yCorner[0][j]) / Wlength_iplus;
+				double temp_xWnorm = (yCorner[i][j + 1] - yCorner[i][j]) / Wlength;
+				double temp_xWnorm_iplus = (yCorner[0][j + 1] - yCorner[0][j]) / Wlength_iplus;
+
 
 				xInorm[i][j] = 0.5*(temp_xWnorm + temp_xWnorm_iplus);
 				yInorm[i][j] = 0.5*(temp_yWnorm + temp_yWnorm_iplus);

@@ -49,7 +49,7 @@ void writeGrid(){
 	fout << "FILETYPE = GRID \n";
 	fout << "VARIABLES = \"X\", \"Y\", \"nSx\", \"nSy\", \"nWx\", \"nWy\" \n";
 	fout << "ZONE I=" << grd.N << " , J=" << grd.M << ", F=POINT \n";
-	for (int j = 0; j < grd.M; j++) {
+	for (int j = 0; j < grd.M-1; j++) {
 		for (int i = 0; i < grd.N; i++) {
 			fout << grd.xCorner[i][j] << ' ' << grd.yCorner[i][j] << ' ';
 			if(i!=grd.N-1){
@@ -72,12 +72,12 @@ void writeSolutionStep(int t){
     else{//if this is not the first time step just append to the existing file
         mode=ofstream::app;
     }
-	fout.open("SolutionFile.d   at", mode);
+	fout.open("SolutionFile.dat", mode);
 	if(!fout.good()){
         cout << "ERROR OPENING SOLUTION FILE\n";
 	}
 
-    fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\", \"Yvel\", \"F0\", \"G0\", \"rho\" \n";
+	/*fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\", \"Yvel\", \"F0\", \"G0\", \"rho\" \n";
     fout << "ZONE T = \"CELL CENTERS AT TIMESTEP " << t << " \", I = " << grd.N - 1 << " , J = " << grd.M - 1 << ", F=POINT \n\n";
     for (int j = 0; j < grd.M - 1; j++) {
         for (int i = 0; i < grd.N-1; i++) {
@@ -85,7 +85,17 @@ void writeSolutionStep(int t){
             fout << cellset[i][j].H() << ' ' << cellset[i][j].S() << ' ' << cellset[i][j].U() << ' ' << cellset[i][j].V() << ' ';
             fout << cellset[i][j].F1() << ' ' << cellset[i][j].G1() << ' ' << cellset[i][j].rho() << endl;
         }
-    }
+    }*/
+
+	fout << "VARIABLES = \"X\", \"Y\", \"xSds\", \"ySds\", \"xSnorm\",\"ySnorm\", \"xWds\", \"yWds\",\"xWnorm\", \"yWnorm\" \n";
+	fout << "ZONE T = \"Grid normals " << t << " \", I = " << grd.N - 1 << " , J = " << grd.M - 1 << ", F=POINT \n\n";
+	for (int i = 0; i < grd.N - 1; i++) {
+		for (int j = 0; j < grd.M - 1; j++) {
+			fout << grd.xCenter[i][j] << ' ' << grd.yCenter[i][j] << ' ' << grd.xSdeltas[i][j] << ' ' << grd.ySdeltas[i][j] << ' ' << grd.xSnorm[i][j] << ' ';
+			fout << grd.ySnorm[i][j] << ' ' << grd.xWdeltas[i][j] << ' ' << grd.yWdeltas[i][j] << ' ' << grd.xWnorm[i][j] << ' ';
+			fout << grd.xWnorm[i][j] << endl;
+		}
+	}
 //		for (int j = 0; j < grd.M - 1; j++) {
 //            fout << grd.xCenter[0][j] << ' ' << grd.yCenter[0][j] << ' ' << cellset[0][j].speed() << ' ' << cellset[0][j].P() << ' ' << cellset[0][j].M() << ' ';
 //            fout << cellset[0][j].H() << ' ' << cellset[0][j].S() << ' ' << cellset[0][j].U() << std::endl;
