@@ -31,7 +31,7 @@ int main(){
         cout << "Time Step:\t"<<t<<"\n";
 
         writeSolutionStep(t);
-        cellset = RK4(grd, cellset, CFL);
+        //cellset = RK4(grd, cellset, CFL);
     }
 }
 
