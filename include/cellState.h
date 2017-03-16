@@ -76,16 +76,16 @@ class cellState{
         double U() {return cell_rhoU/cell_rho;}
         double V() {return cell_rhoV/cell_rho;}
         double speed() {return sqrt(pow(U(),2)+pow(V(),2));}
-        double M() {return speed()/C();}
-        double F1() {return cell_rhoU;}
-        double F2() {return cell_rhoU * U() + P();}
-        double F3() {return cell_rhoU * V();}
-        double F4() {return cell_rhoU * H();}
-        double G1() {return cell_rhoV;}
-        double G2() {return cell_rhoV * U() + P();}
-        double G3() {return cell_rhoV * V();}
-        double G4() {return cell_rhoV * H();}
-        //variable manipulation functions returns the value which has been set (Maybe they should return the THIS or void)
+		double M() { return speed() / C(); }
+		double F1() { return cell_rhoU; }
+		double F2() { return cell_rhoU * U() + P(); }
+		double F3() { return cell_rhoU * V(); }
+		double F4() { return cell_rhoU * H(); }
+		double G1() { return cell_rhoV; }
+		double G2() { return cell_rhoV * U(); }
+		double G3() { return cell_rhoV * V() + P(); }
+		double G4() { return cell_rhoV * H(); }
+		//variable manipulation functions returns the value which has been set (Maybe they should return the THIS or void)
         double rhois(double a){
             cell_rho=a;
             return cell_rho;

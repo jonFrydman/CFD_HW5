@@ -95,10 +95,10 @@ class grid{
             }
         }
         void defineSideLengths(){
-            xSside.resize(N-1, std::vector<double>(M));
+            xSside.resize(N-1, std::vector<double>(M)); // doesn't bother past N-1
             ySside.resize(N-1, std::vector<double>(M));
-            xWside.resize(N-1, std::vector<double>(M-1));
-            yWside.resize(N-1, std::vector<double>(M-1));
+            xWside.resize(N, std::vector<double>(M-1)); // doesn't have to look past M-1
+            yWside.resize(N, std::vector<double>(M-1));
             //Side length on the south side and west side of cell
             for(int i=0; i<N-1; i++){
                 for(int j=0; j<M-1; j++){
@@ -106,6 +106,10 @@ class grid{
                     ySside[i][j]=abs(yCorner[i+1][j]-yCorner[i][j]);
                     xWside[i][j]=abs(xCorner[i][j+1]-xCorner[i][j]);
                     yWside[i][j]=abs(yCorner[i][j+1]-yCorner[i][j]);
+
+					xWside[N - 1][j] = abs(xCorner[0][j + 1] - xCorner[0][j]); // boundary conditions
+					yWside[N - 1][j] = abs(yCorner[0][j + 1] - yCorner[0][j]);
+
                 }
                 xSside[i][M-1]=abs(xCorner[i+1][M-1]-xCorner[i][M-1]);
                 ySside[i][M-1]=abs(yCorner[i+1][M-1]-yCorner[i][M-1]); // checked at 3/15 9pm
@@ -126,8 +130,8 @@ class grid{
                     xWnorm[i][j]=(yCorner[i][j+1]-yCorner[i][j])/Wlength;
                 }
                 double Slength=sqrt(pow(xSside[i][M-1],2)+pow(ySside[i][M-1],2));
-                ySnorm[i][M-1]=-(xCorner[i+1][M-1]-xCorner[i][M-1])/Slength;
-                xSnorm[i][M-1]=(yCorner[i+1][M-1]-yCorner[i][M-1])/Slength;
+                ySnorm[i][M-1]=(xCorner[i+1][M-1]-xCorner[i][M-1])/Slength;
+                xSnorm[i][M-1]=-(yCorner[i+1][M-1]-yCorner[i][M-1])/Slength; //checked 3/15 at 11:45
             }
         }
         void defineDeltaS(){
@@ -169,7 +173,7 @@ class grid{
 				double Slength = sqrt(pow(xSside[i][j], 2) + pow(ySside[i][j], 2));
 				double Slength_jplus = sqrt(pow(xSside[i][j+1], 2) + pow(ySside[i][j+1], 2));
 				double Wlength = sqrt(pow(xWside[i][j], 2) + pow(yWside[i][j], 2));
-				double Wlength_iplus = sqrt(pow(xWside[0][j], 2) + pow(yWside[0][j], 2));
+				double Wlength_iplus = sqrt(pow(xWside[i+1][j], 2) + pow(yWside[i+1][j], 2));
 
 				double temp_ySnorm = (xCorner[i + 1][j] - xCorner[i][j]) / Slength;
 				double temp_ySnorm_jplus = (xCorner[i + 1][j+1] - xCorner[i][j+1]) / Slength_jplus;
@@ -178,10 +182,10 @@ class grid{
 				double temp_xSnorm_jplus = -(yCorner[i + 1][j+1] - yCorner[i][j+1]) / Slength_jplus;
 
 				double temp_yWnorm = -(xCorner[i][j + 1] - xCorner[i][j]) / Wlength;
-				double temp_yWnorm_iplus = -(xCorner[0][j + 1] - xCorner[0][j]) / Wlength_iplus;
+				double temp_yWnorm_iplus = -(xCorner[i+1][j + 1] - xCorner[i+1][j]) / Wlength_iplus;
 
 				double temp_xWnorm = (yCorner[i][j + 1] - yCorner[i][j]) / Wlength;
-				double temp_xWnorm_iplus = (yCorner[0][j + 1] - yCorner[0][j]) / Wlength_iplus;
+				double temp_xWnorm_iplus = (yCorner[i+1][j + 1] - yCorner[i+1][j]) / Wlength_iplus;
 
 				xInorm[i][j] = 0.5*(temp_xWnorm + temp_xWnorm_iplus);
 				yInorm[i][j] = 0.5*(temp_yWnorm + temp_yWnorm_iplus);
@@ -190,7 +194,7 @@ class grid{
 
 			}
 
-			//To get the boundary values for these s's along the cells in j = 63.
+			//To get the boundary values for these s's along the cells in j = 63. Note the boundary condition when i = 127
 			for (int i = 0; i < N - 1; i++) {
 
 				int j = M - 2;
@@ -198,7 +202,7 @@ class grid{
 				double Slength = sqrt(pow(xSside[i][j], 2) + pow(ySside[i][j], 2));
 				double Slength_jplus = sqrt(pow(xSside[i][j + 1], 2) + pow(ySside[i][j + 1], 2));
 				double Wlength = sqrt(pow(xWside[i][j], 2) + pow(yWside[i][j], 2));
-				double Wlength_iplus = sqrt(pow(xWside[0][j], 2) + pow(yWside[0][j], 2));
+				double Wlength_iplus = sqrt(pow(xWside[i + 1][j], 2) + pow(yWside[i + 1][j], 2));
 
 				double temp_ySnorm = (xCorner[i + 1][j] - xCorner[i][j]) / Slength;
 				double temp_ySnorm_jplus = (xCorner[i + 1][j + 1] - xCorner[i][j + 1]) / Slength_jplus;
@@ -207,14 +211,15 @@ class grid{
 				double temp_xSnorm_jplus = -(yCorner[i + 1][j + 1] - yCorner[i][j + 1]) / Slength_jplus;
 
 				double temp_yWnorm = -(xCorner[i][j + 1] - xCorner[i][j]) / Wlength;
-				double temp_yWnorm_iplus = -(xCorner[0][j + 1] - xCorner[0][j]) / Wlength_iplus;
+				double temp_yWnorm_iplus = -(xCorner[i + 1][j + 1] - xCorner[i + 1][j]) / Wlength_iplus;
 
 				double temp_xWnorm = (yCorner[i][j + 1] - yCorner[i][j]) / Wlength;
-				double temp_xWnorm_iplus = (yCorner[0][j + 1] - yCorner[0][j]) / Wlength_iplus;
+				double temp_xWnorm_iplus = (yCorner[i + 1][j + 1] - yCorner[i + 1][j]) / Wlength_iplus;
 
 
-				xInorm[i][j] = 0.5*(temp_xWnorm + temp_xWnorm_iplus);
+				xInorm[i][j] = 0.5*(temp_xWnorm + temp_xWnorm_iplus); // 3/15 this needs to be fixed
 				yInorm[i][j] = 0.5*(temp_yWnorm + temp_yWnorm_iplus);
+
 				xJnorm[i][j] = 0.5*(temp_xSnorm + temp_xSnorm_jplus);
 				yJnorm[i][j] = 0.5*(temp_ySnorm + temp_ySnorm_jplus);
 
