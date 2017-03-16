@@ -180,8 +180,8 @@ vector<double> InletOutletFlux(grid &grd,  vector< vector<cellState> > &cellset,
         Rminus=M_ref*c_ref*grd.xSnorm[i][last]; //physical outlet velcity dotted with the normal vector (out outlet velocity is only in the x-driection)
         ubnorm=(Rplus+Rminus)/2; //normal component of velocity
         ubtang=cellset[i][last].U()*grd.ySnorm[i][last]-cellset[i][last].V()*grd.xSnorm[i][last]; //tangential component. Geometry looks good.
-        ubx = (ubnorm-ubtang)*grd.xSnorm[i][last];
-        uby = (ubnorm+ubtang)*grd.ySnorm[i][last];
+        ubx = (ubnorm-ubtang)*grd.xSnorm[i][last]; //check geometrically
+        uby = (ubnorm+ubtang)*grd.ySnorm[i][last]; //check geometrically
     }
     else{//inlet
 //        Rminus=normal_speed+2*cellset[i][last].C()/(gamma-1);
@@ -203,9 +203,9 @@ vector<double> InletOutletFlux(grid &grd,  vector< vector<cellState> > &cellset,
     GSTAR[2]= rho_ref*pow(uby,2)+P_ref;
     GSTAR[3]= rho_ref*uby*(gamma/(gamma-1)*P_ref/rho_ref+pow(ubx,2)/2+pow(uby,2)/2);
 
-    netFlux[0]=FSTAR[0]*grd.xSnorm[i][last]+GSTAR[0]*grd.ySnorm[i][last];
-    netFlux[1]=FSTAR[1]*grd.xSnorm[i][last]+GSTAR[1]*grd.ySnorm[i][last];
-    netFlux[2]=FSTAR[2]*grd.xSnorm[i][last]+GSTAR[2]*grd.ySnorm[i][last];
-    netFlux[3]=FSTAR[3]*grd.xSnorm[i][last]+GSTAR[3]*grd.ySnorm[i][last];
-    return FSTAR; //Placeholder for now
+    netFlux[0]=FSTAR[0]*grd.xSdeltas[i][last]+GSTAR[0]*grd.ySdeltas[i][last];
+    netFlux[1]=FSTAR[1]*grd.xSdeltas[i][last]+GSTAR[1]*grd.ySdeltas[i][last];
+    netFlux[2]=FSTAR[2]*grd.xSdeltas[i][last]+GSTAR[2]*grd.ySdeltas[i][last];
+    netFlux[3]=FSTAR[3]*grd.xSdeltas[i][last]+GSTAR[3]*grd.ySdeltas[i][last];
+    return netFlux; //Placeholder for now
 }

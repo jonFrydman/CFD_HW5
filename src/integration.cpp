@@ -5,6 +5,7 @@
 #include <cmath>
 #include <numericalFlux.h>
 using namespace std;
+
 vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i, int j){
 
     std::vector<double> RESIDUALS(4, 0.0);
@@ -26,11 +27,13 @@ vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i
         SFAV = AirfoilFlux(grd, cellset, i);
     }
     else if(j==grd.M-2){
-        cout << "OuterFlux:\t i = " << i << "\n";
+
         NFAV = InletOutletFlux(grd, cellset, i);
         SFAV = SouthFlux(grd, ns_stencil);
+//        cout << "OuterFlux:\t i = " << i << "\n";
 //        cout << "NFAV[0]:\t" << NFAV[0] << "\t" << "NFAV[1]:\t" << NFAV[1] << "\t" << "NFAV[2]:\t" << NFAV[2] << "\t" << "NFAV[3]:\t" << NFAV[3] << "\n";
 //        cout << "SFAV[0]:\t" << SFAV[0] << "\t" << "SFAV[1]:\t" << SFAV[1] << "\t" << "SFAV[2]:\t" << SFAV[2] << "\t" << "SFAV[3]:\t" << SFAV[3] << "\n";
+//        cout << ns_stencil[2].rho() << "\t"
 //        system("pause");
 	}
     else{ //near boundaries assume AV=0
