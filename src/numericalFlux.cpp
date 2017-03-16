@@ -159,6 +159,17 @@ vector<double> AirfoilFlux(grid & grd, vector< vector<cellState> > &cellset, int
     double ubx=ubtang*grd.ySnorm[i][0];
     double uby=ubtang*grd.xSnorm[i][0];
 
+	FSTAR[0] = 0;
+	FSTAR[1] = Pb*grd.xSnorm[i][0];
+	FSTAR[2] = 0;
+	FSTAR[3] = 0;
+
+	GSTAR[0] = 0;
+	GSTAR[1] = 0;
+	GSTAR[2] = Pb*grd.ySnorm[i][0];
+	GSTAR[3] = 0;
+
+/* Removed to try the simple pressure normal flux
     FSTAR[0]= rho*ubx;
     FSTAR[1]= rho*pow(ubx,2)+Pb;
     FSTAR[2]= rho*ubx*uby;
@@ -168,6 +179,8 @@ vector<double> AirfoilFlux(grid & grd, vector< vector<cellState> > &cellset, int
     GSTAR[1]= rho*ubx*uby;
     GSTAR[2]= rho*pow(uby,2)+Pb;
 	GSTAR[3]= uby*(Pb*gamma / (gamma - 1) + rho*(pow(ubx, 2) + pow(uby, 2)) / 2);
+
+	*/
 
     FoilFlux[0]=FSTAR[0]*grd.xSdeltas[i][0]+GSTAR[0]*grd.ySdeltas[i][0];
     FoilFlux[1]=FSTAR[1]*grd.xSdeltas[i][0]+GSTAR[1]*grd.ySdeltas[i][0];
@@ -245,8 +258,8 @@ vector<double> InletOutletFlux(grid &grd,  vector< vector<cellState> > &cellset,
         ceebee = (Rminus - Rplus)*(gamma - 1) / 4;
     }
 
-    rho = pow(pow(ceebee, 2)*pow(rho_ref, gamma) / (gamma*P_ref), gamma - 1);
-    P = pow(ceebee, 2)*rho / gamma;
+    //rho = pow(pow(ceebee, 2)*pow(rho_ref, gamma) / (gamma*P_ref), gamma - 1);
+    //P = pow(ceebee, 2)*rho / gamma;
     P=P_ref;
     rho=rho_ref;
 

@@ -91,17 +91,17 @@
 	<iostream>
 	"eulerFlux.h"
 
-1489669747 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\eulerflux.cpp
+1489705750 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\eulerflux.cpp
 	"cellState.h"
 	"grid.h"
 	<vector>
 	<iostream>
 	"eulerFlux.h"
 
-1489646622 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\cellstate.h
+1489705605 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\cellstate.h
 	<math.h>
 
-1489653410 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\grid.h
+1489701646 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\grid.h
 	<fstream>
 	<string>
 	<cstdlib>
@@ -110,7 +110,7 @@
 	<cmath>
 	<iostream>
 
-1489577275 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\eulerflux.h
+1489701646 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\eulerflux.h
 	"cellState.h"
 	"grid.h"
 	<vector>
@@ -122,15 +122,16 @@
 	<cmath>
 	<numericalFlux.h>
 
-1489577275 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\numericalflux.h
+1489701646 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\numericalflux.h
 	"cellState.h"
 	"grid.h"
 	"eulerFlux.h"
 	<vector>
 
-1489673557 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp
+1489710152 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\sandbox.cpp
 	<iostream>
 	<fstream>
+	<sstream>
 	"referenceParameters.h"
 	"integration.h"
 	"eulerFlux.h"
@@ -138,10 +139,10 @@
 	"grid.h"
 	"numericalFlux.h"
 
-1489646568 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\referenceparameters.h
+1489701646 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\referenceparameters.h
 	<math.h>
 
-1489577275 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\integration.h
+1489705087 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\integration.h
 	<vector>
 	"grid.h"
 	"cellState.h"
@@ -182,7 +183,7 @@
 	"grid.h"
 	"numericalFlux.h"
 
-1489636573 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp
+1489705338 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\integration.cpp
 	"integration.h"
 	"cellState.h"
 	"grid.h"

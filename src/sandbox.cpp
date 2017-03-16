@@ -46,7 +46,7 @@ void loadICs(){
     for(int i=0; i<grd.N-1;i++){
         for(int j=0; j<grd.M-1;j++){
             cellset[i][j].redefine(rho_ref,rho_ref*M_ref*c_ref,0,rhoE_ref,gamma,cv,i,j);
-            if(i==80 && j>10 && j< 30){
+            if(i==80 && j>10 && j< 30){ // ************************* Fix me later **************************
                 cellset[i][j].rhois(.5*rho_ref);
             }
         }

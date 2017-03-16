@@ -23,7 +23,7 @@ vector<double> GenericFlux(grid &grd,  vector<cellState> &stencil){
 
 	std::vector<double> GENERIC_FLUX(4, 0.0);
 	//Perpendicular flux to the boundary normal is <F, G> dot <nx, ny>, but eventually, deltaS must be added too
-	if(stencil[2].j()==stencil[3].j()){ // if cells have an East-West relation
+	if(stencil[2].j()==stencil[3].j()){ // if cells have an North-South relation
         GENERIC_FLUX[0] = FSTAR1*grd.xWdeltas[I][J] + GSTAR1*grd.yWdeltas[I][J];
         GENERIC_FLUX[1] = FSTAR2*grd.xWdeltas[I][J] + GSTAR2*grd.yWdeltas[I][J];
         GENERIC_FLUX[2] = FSTAR3*grd.xWdeltas[I][J] + GSTAR3*grd.yWdeltas[I][J];
