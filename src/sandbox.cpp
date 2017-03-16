@@ -116,12 +116,16 @@ void writeSolutionStep(int t){
 	for (int j = 0; j < grd.M - 1; j++) {
 		for (int i = 0; i < grd.N - 1; i++) {
 
+			fout << endl << "# i = " << i << ", j = " << j << endl << endl;
+
 			fout << grd.xCenter[i][j] << ' ' << grd.yCenter[i][j] << ' ' << cellset[i][j].speed() << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ';
 			fout << cellset[i][j].H() << ' ' << cellset[i][j].S() << ' ' << cellset[i][j].U() << ' ' << cellset[i][j].V() << ' ';
 			fout << cellset[i][j].F1() << ' ' << cellset[i][j].G1() << ' ' << cellset[i][j].rho() << ' ';
 			residual = Residuals(grd, cellset, i, j);
 			fout << residual[0] << ' ' << residual[1] << ' ' << residual[2] << ' ' << residual[3] << endl;
 		}
+
+		fout << endl << "# i = " << grd.N-1 << ", j = " << j << endl << endl;
 
 		fout << grd.xCenter[0][j] << ' ' << grd.yCenter[0][j] << ' ' << cellset[0][j].speed() << ' ' << cellset[0][j].P() << ' ' << cellset[0][j].M() << ' ';
 		fout << cellset[0][j].H() << ' ' << cellset[0][j].S() << ' ' << cellset[0][j].U() << ' ' << cellset[0][j].V() << ' ';

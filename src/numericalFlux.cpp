@@ -167,45 +167,59 @@ vector<double> InletOutletFlux(grid &grd,  vector< vector<cellState> > &cellset,
     double P_ref=101325;// Pa
     double c_ref=sqrt(1.4*P_ref/rho_ref);
 
-    double Rplus, Rminus, ubnorm,ubtang, ubx, uby;
+    double Rplus, Rminus, ubnorm,ubtang, ubx, uby, ceebee, rho, P;
     vector<double> FSTAR(4,0.0);
     vector<double> GSTAR(4,0.0);
     vector<double> netFlux(4,0.0);
-    int last=grd.M-2; // Last is actually M-2, unless we give cellset a ghost cell
-    double gamma=cellset[i][last].gamma();
-    double normal_speed=cellset[i][last].U()*grd.xSnorm[i][last] + cellset[i][last].V()*grd.ySnorm[i][last];
 
-    if(normal_speed >=0){ //Outlet
-        Rplus=normal_speed+2*cellset[i][last].C()/(gamma-1);
-        Rminus=M_ref*c_ref*grd.xSnorm[i][last]; //physical outlet velcity dotted with the normal vector (out outlet velocity is only in the x-driection)
+
+    int ctrlast=grd.M-2; // Last is actually M-2, unless we give cellset a ghost cell
+	int normlast = grd.M - 1; // The normal on the boundary is what matters here
+    double gamma=cellset[i][ctrlast].gamma();
+    double normal_speed=cellset[i][ctrlast].U()*grd.xSnorm[i][normlast] + cellset[i][ctrlast].V()*grd.ySnorm[i][normlast];
+
+    if(normal_speed < 0){ //inlet
+        Rplus= M_ref*c_ref*grd.xSnorm[i][normlast]	 +2*cellset[i][ctrlast].C()/(gamma-1);
+        Rminus= cellset[i][ctrlast].U()*grd.xSnorm[i][normlast]+ cellset[i][ctrlast].V()*grd.ySnorm[i][normlast]-2*cellset[i][ctrlast].C()/(gamma-1); //physical inlet velcity dotted with the normal vector
         ubnorm=(Rplus+Rminus)/2; //normal component of velocity
-        ubtang=cellset[i][last].U()*grd.ySnorm[i][last]-cellset[i][last].V()*grd.xSnorm[i][last]; //tangential component. Geometry looks good.
-        ubx = (ubnorm-ubtang)*grd.xSnorm[i][last]; //check geometrically
-        uby = (ubnorm+ubtang)*grd.ySnorm[i][last]; //check geometrically
+        ubtang=cellset[i][ctrlast].U()*grd.ySnorm[i][normlast]-cellset[i][ctrlast].V()*grd.xSnorm[i][normlast]; //tangential component. Geometry looks good.
+        ubx = (ubnorm-ubtang)*grd.xSnorm[i][normlast]; //check geometrically
+        uby = (ubnorm+ubtang)*grd.ySnorm[i][normlast]; //check geometrically
+		ceebee = (Rplus - Rminus)*(gamma - 1) / 4;
+
+		rho = pow(pow(ceebee, 2)*pow(rho_ref, gamma) / (gamma*P_ref), gamma - 1);
+		P = pow(ceebee, 2)*rho / gamma;
+
+
     }
-    else{//inlet
-//        Rminus=normal_speed+2*cellset[i][last].C()/(gamma-1);
-//        Rplus=M_ref*c_ref*grd.xSnorm[i][last]; //physical outlet velcity dotted with the normal vector (out outlet velocity is only in the x-driection)
-//        ubnorm=(Rplus+Rminus)/2; //normal component of velocity
-//        ubtang=cellset[i][last].U()*grd.ySnorm[i][last]-cellset[i][last].V()*grd.xSnorm[i][last]; //tangential component. Geometry looks good.
-//        ubx = (ubnorm-ubtang)*grd.xSnorm[i][last];
-//        uby = (ubnorm+ubtang)*grd.ySnorm[i][last];
+    else{//outlet
+        Rminus=normal_speed+2*cellset[i][ctrlast].C()/(gamma-1);
+        Rplus=M_ref*c_ref*grd.xSnorm[i][normlast]; //physical outlet velcity dotted with the normal vector (out outlet velocity is only in the x-driection)
+        ubnorm=(Rplus+Rminus)/2; //normal component of velocity
+        ubtang=cellset[i][ctrlast].U()*grd.ySnorm[i][normlast]-cellset[i][ctrlast].V()*grd.xSnorm[i][normlast]; //tangential component. Geometry looks good.
+        ubx = (ubnorm-ubtang)*grd.xSnorm[i][normlast];
+        uby = (ubnorm+ubtang)*grd.ySnorm[i][normlast];
         ubx=M_ref*c_ref; //X-speed is at the mach speed, ignoring ferrante's wild notions of consistant tangential velocity
         uby=0;
+
+		ceebee = (Rplus - Rminus)*(gamma - 1) / 4;
+
+		rho = pow(pow(ceebee, 2)*pow(rho_ref, gamma) / (gamma*P_ref), gamma - 1);
+		P = pow(ceebee, 2)*rho / gamma;
     }
-    FSTAR[0]= rho_ref*ubx;
-    FSTAR[1]= rho_ref*pow(ubx,2)+P_ref;
-    FSTAR[2]= rho_ref*ubx*uby;
-    FSTAR[3]= rho_ref*ubx*(gamma/(gamma-1)*P_ref/rho_ref+pow(ubx,2)/2+pow(uby,2)/2);
+    FSTAR[0]= rho*ubx;
+    FSTAR[1]= rho*pow(ubx,2)+P;
+    FSTAR[2]= rho*ubx*uby;
+    FSTAR[3]= P*gamma/(gamma-1)+rho*(pow(ubx,2)+ pow(uby, 2))/2;
 
-    GSTAR[0]= rho_ref*uby;
-    GSTAR[1]= rho_ref*ubx*uby;
-    GSTAR[2]= rho_ref*pow(uby,2)+P_ref;
-    GSTAR[3]= rho_ref*uby*(gamma/(gamma-1)*P_ref/rho_ref+pow(ubx,2)/2+pow(uby,2)/2);
+    GSTAR[0]= rho*uby;
+    GSTAR[1]= rho*ubx*uby;
+    GSTAR[2]= rho*pow(uby,2)+P;
+	GSTAR[3] = P*gamma / (gamma - 1) + rho*(pow(ubx, 2) + pow(uby, 2)) / 2;
 
-    netFlux[0]=FSTAR[0]*grd.xSdeltas[i][last]+GSTAR[0]*grd.ySdeltas[i][last];
-    netFlux[1]=FSTAR[1]*grd.xSdeltas[i][last]+GSTAR[1]*grd.ySdeltas[i][last];
-    netFlux[2]=FSTAR[2]*grd.xSdeltas[i][last]+GSTAR[2]*grd.ySdeltas[i][last];
-    netFlux[3]=FSTAR[3]*grd.xSdeltas[i][last]+GSTAR[3]*grd.ySdeltas[i][last];
+    netFlux[0]=FSTAR[0]*grd.xSdeltas[i][normlast]+GSTAR[0]*grd.ySdeltas[i][normlast];
+    netFlux[1]=FSTAR[1]*grd.xSdeltas[i][normlast]+GSTAR[1]*grd.ySdeltas[i][normlast];
+    netFlux[2]=FSTAR[2]*grd.xSdeltas[i][normlast]+GSTAR[2]*grd.ySdeltas[i][normlast];
+    netFlux[3]=FSTAR[3]*grd.xSdeltas[i][normlast]+GSTAR[3]*grd.ySdeltas[i][normlast];
     return netFlux; //Placeholder for now
 }
