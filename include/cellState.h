@@ -82,8 +82,8 @@ class cellState{
         double F3() {return cell_rhoU * V();}
         double F4() {return cell_rhoU * H();}
         double G1() {return cell_rhoV;}
-        double G2() {return cell_rhoV * V() + P();}
-        double G3() {return cell_rhoV * U();}
+        double G2() {return cell_rhoV * U();}
+        double G3() {return cell_rhoV * V() + P();;}
         double G4() {return cell_rhoV * H();}
         //variable manipulation functions returns the value which has been set (Maybe they should return the THIS or void)
         double rhois(double a){

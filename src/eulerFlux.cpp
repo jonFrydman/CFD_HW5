@@ -23,10 +23,10 @@ vector<double> GenericFlux(grid &grd,  vector<cellState> &stencil){
 
 	std::vector<double> GENERIC_FLUX(4, 0.0);
 	//Perpendicular flux to the boundary normal is <F, G> dot <nx, ny>
-	GENERIC_FLUX[0] = FSTAR1*grd.xWdeltas[I][J] + GSTAR1*grd.yWdeltas[I][J];
-	GENERIC_FLUX[1] = FSTAR2*grd.xWdeltas[I][J] + GSTAR2*grd.yWdeltas[I][J];
-	GENERIC_FLUX[2] = FSTAR3*grd.xWdeltas[I][J] + GSTAR3*grd.yWdeltas[I][J];
-	GENERIC_FLUX[3] = FSTAR4*grd.xWdeltas[I][J] + GSTAR4*grd.yWdeltas[I][J];
+	GENERIC_FLUX[0] = FSTAR1*grd.xWnorm[I][J] + GSTAR1*grd.yWnorm[I][J];
+	GENERIC_FLUX[1] = FSTAR2*grd.xWnorm[I][J] + GSTAR2*grd.yWnorm[I][J];
+	GENERIC_FLUX[2] = FSTAR3*grd.xWnorm[I][J] + GSTAR3*grd.yWnorm[I][J];
+	GENERIC_FLUX[3] = FSTAR4*grd.xWnorm[I][J] + GSTAR4*grd.yWnorm[I][J];
 	return GENERIC_FLUX;
 }
 
