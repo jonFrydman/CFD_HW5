@@ -12,7 +12,8 @@ using namespace std;
 vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i, int j);
 double Tau(grid &grd, cellState cell, double CFL);
 vector<double> AlphaRK();
-vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset, double CFL);
+void RK4(grid &grd, vector< vector<cellState> > &cellset, double CFL);
+void singleStepIntegration(grid &grd, vector< vector<cellState> > &cellset, double CFL);
 
 vector<cellState> stencilEW(grid & grd, vector< vector<cellState> > & cellset, int i, int j);
 vector<cellState> stencilNS(grid & grd, vector< vector<cellState> > & cellset, int i, int j);

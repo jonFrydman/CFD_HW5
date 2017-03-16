@@ -23,10 +23,18 @@ vector<double> GenericFlux(grid &grd,  vector<cellState> &stencil){
 
 	std::vector<double> GENERIC_FLUX(4, 0.0);
 	//Perpendicular flux to the boundary normal is <F, G> dot <nx, ny>, but eventually, deltaS must be added too
-	GENERIC_FLUX[0] = FSTAR1*grd.xWdeltas[I][J] + GSTAR1*grd.yWdeltas[I][J];
-	GENERIC_FLUX[1] = FSTAR2*grd.xWdeltas[I][J] + GSTAR2*grd.yWdeltas[I][J];
-	GENERIC_FLUX[2] = FSTAR3*grd.xWdeltas[I][J] + GSTAR3*grd.yWdeltas[I][J];
-	GENERIC_FLUX[3] = FSTAR4*grd.xWdeltas[I][J] + GSTAR4*grd.yWdeltas[I][J]; // THese should definitely be delta S's
+	if(stencil[2].j()==stencil[3].j()){ // if cells have an East-West relation
+        GENERIC_FLUX[0] = FSTAR1*grd.xWdeltas[I][J] + GSTAR1*grd.yWdeltas[I][J];
+        GENERIC_FLUX[1] = FSTAR2*grd.xWdeltas[I][J] + GSTAR2*grd.yWdeltas[I][J];
+        GENERIC_FLUX[2] = FSTAR3*grd.xWdeltas[I][J] + GSTAR3*grd.yWdeltas[I][J];
+        GENERIC_FLUX[3] = FSTAR4*grd.xWdeltas[I][J] + GSTAR4*grd.yWdeltas[I][J]; // THese should definitely be delta S's
+	}
+	else if(stencil[2].i()==stencil[3].i()){ // if cells have an East-West relation
+        GENERIC_FLUX[0] = FSTAR1*grd.xSdeltas[I][J] + GSTAR1*grd.ySdeltas[I][J];
+        GENERIC_FLUX[1] = FSTAR2*grd.xSdeltas[I][J] + GSTAR2*grd.ySdeltas[I][J];
+        GENERIC_FLUX[2] = FSTAR3*grd.xSdeltas[I][J] + GSTAR3*grd.ySdeltas[I][J];
+        GENERIC_FLUX[3] = FSTAR4*grd.xSdeltas[I][J] + GSTAR4*grd.ySdeltas[I][J]; // THese should definitely be delta S's
+	}
 	return GENERIC_FLUX;
 
 }

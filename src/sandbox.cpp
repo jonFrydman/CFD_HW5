@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<sstream>
 #include "referenceParameters.h"
 #include "integration.h"
 #include "eulerFlux.h"
@@ -18,6 +19,7 @@ vector< vector<cellState> > cellset;
 void loadICs();
 void writeGrid();
 void writeSolutionStep(int t);
+string solutionString(int i, int j);
 
 int main(){
     cout << "Loading Initial Conditions\n";
@@ -26,12 +28,16 @@ int main(){
 
 	//cout << "Please make the console full screen"<<endl;
 	//system("pause");
-
-    for (int t=0 ; t<50; t++){
-
+    int writemodulo=1;//write solution every # of time steps.
+    int tmax=5;
+    for (int t=0 ; t<=tmax; t++){
 		cout << "Time Step:\t"<<t<<"\n";
-		writeSolutionStep(t);
-        cellset = RK4(grd, cellset, CFL);
+		//significantly speed up code by not writing every timestep (writing is slow)
+		if(t==0 || t==tmax || t%writemodulo==0 || writemodulo <0){ //write solution set for t=0 , on write modulo steps, and in case of bad write modulo
+            writeSolutionStep(t);
+		}
+        //RK4(grd, cellset, CFL);
+        singleStepIntegration(grd, cellset, CFL);
     }
 }
 
@@ -40,6 +46,9 @@ void loadICs(){
     for(int i=0; i<grd.N-1;i++){
         for(int j=0; j<grd.M-1;j++){
             cellset[i][j].redefine(rho_ref,rho_ref*M_ref*c_ref,0,rhoE_ref,gamma,cv,i,j);
+            if(i==80 && j>10 && j< 30){
+                cellset[i][j].rhois(.5*rho_ref);
+            }
         }
     }
 }
@@ -108,33 +117,16 @@ void writeSolutionStep(int t){
         cout << "ERROR OPENING SOLUTION FILE\n";
 	}
 	fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\", \"Yvel\",";
-	fout << "\"F0\", \"G0\", \"rho\", \"RES0\", \"RES1\", \"RES2\", \"RES3\" \n";
+	fout << "\"F0\", \"F1\", \"F2\", \"F3\", \"G0\", \"G1\", \"G2\", \"G3\", \"rho\", ";
+	fout << "\"RES0\", \"RES1\", \"RES2\", \"RES3\" \n";
 	fout << "ZONE T = \"CELL CENTERS AT TIMESTEP " << t << " \", I = " << grd.N << " , J = " << grd.M - 1 << ", F=POINT \n\n";
-
-	vector<double> residual;
 
 	for (int j = 0; j < grd.M - 1; j++) {
 		for (int i = 0; i < grd.N - 1; i++) {
-
-			fout << endl << "# i = " << i << ", j = " << j << endl << endl;
-
-			fout << grd.xCenter[i][j] << ' ' << grd.yCenter[i][j] << ' ' << cellset[i][j].speed() << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ';
-			fout << cellset[i][j].H() << ' ' << cellset[i][j].S() << ' ' << cellset[i][j].U() << ' ' << cellset[i][j].V() << ' ';
-			fout << cellset[i][j].F1() << ' ' << cellset[i][j].G1() << ' ' << cellset[i][j].rho() << ' ';
-			residual = Residuals(grd, cellset, i, j);
-			fout << residual[0] << ' ' << residual[1] << ' ' << residual[2] << ' ' << residual[3] << endl;
+            fout << solutionString(i,j);
 		}
-
-		fout << endl << "# i = " << grd.N-1 << ", j = " << j << endl << endl;
-
-		fout << grd.xCenter[0][j] << ' ' << grd.yCenter[0][j] << ' ' << cellset[0][j].speed() << ' ' << cellset[0][j].P() << ' ' << cellset[0][j].M() << ' ';
-		fout << cellset[0][j].H() << ' ' << cellset[0][j].S() << ' ' << cellset[0][j].U() << ' ' << cellset[0][j].V() << ' ';
-		fout << cellset[0][j].F1() << ' ' << cellset[0][j].G1() << ' ' << cellset[0][j].rho() << ' ';
-		residual = Residuals(grd, cellset, 0, j);
-		fout << residual[0] << ' ' << residual[1] << ' ' << residual[2] << ' ' << residual[3] << endl;
-
+        fout << solutionString(0,j);
 	}
-
 //		for (int j = 0; j < grd.M - 1; j++) {
 //            fout << grd.xCenter[0][j] << ' ' << grd.yCenter[0][j] << ' ' << cellset[0][j].speed() << ' ' << cellset[0][j].P() << ' ' << cellset[0][j].M() << ' ';
 //            fout << cellset[0][j].H() << ' ' << cellset[0][j].S() << ' ' << cellset[0][j].U() << std::endl;
@@ -142,4 +134,20 @@ void writeSolutionStep(int t){
     fout << endl << "TEXT X = " << grd.N - 1 << ", Y = " << grd.M - 1 << ", T = \"Timestep = " << t << " \", F = COURIER, CS = FRAME, H = 2, ZN = " << t << endl << endl;
     //system("pause");
     fout.close();
+}
+
+string solutionString(int i, int j){
+    stringstream fout;
+	vector<double> residual(4,0.0);
+
+    fout << endl << "# i = " << i << ", j = " << j << endl << endl;
+
+    fout << grd.xCenter[i][j] << ' ' << grd.yCenter[i][j] << ' ' << cellset[i][j].speed() << ' ' << cellset[i][j].P() << ' ' << cellset[i][j].M() << ' ';
+    fout << cellset[i][j].H() << ' ' << cellset[i][j].S() << ' ' << cellset[i][j].U() << ' ' << cellset[i][j].V() << ' ';
+    fout << cellset[i][j].F1() << ' ' << cellset[i][j].F2() << ' ' << cellset[i][j].F3() << ' ' << cellset[i][j].F4() << ' ';
+    fout << cellset[i][j].G1() << ' ' << cellset[i][j].G2() << ' ' << cellset[i][j].G3() << ' ' << cellset[i][j].G4() << ' ';
+    fout << cellset[i][j].rho() << ' ';
+    residual = Residuals(grd, cellset, i, j);
+    fout << residual[0] << ' ' << residual[1] << ' ' << residual[2] << ' ' << residual[3] << endl;
+    return fout.str();
 }

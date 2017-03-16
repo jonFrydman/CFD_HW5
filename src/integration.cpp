@@ -25,15 +25,14 @@ vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i
     else if(j==0){ //at airfoil boundary airfoil case, no AV
         NFAV = NorthFlux(grd, ns_stencil);
         SFAV = AirfoilFlux(grd, cellset, i);
+        //SFAV = SouthFlux(grd, ns_stencil);
     }
     else if(j==grd.M-2){
-
         NFAV = InletOutletFlux(grd, cellset, i);
         SFAV = SouthFlux(grd, ns_stencil);
 //        cout << "OuterFlux:\t i = " << i << "\n";
 //        cout << "NFAV[0]:\t" << NFAV[0] << "\t" << "NFAV[1]:\t" << NFAV[1] << "\t" << "NFAV[2]:\t" << NFAV[2] << "\t" << "NFAV[3]:\t" << NFAV[3] << "\n";
 //        cout << "SFAV[0]:\t" << SFAV[0] << "\t" << "SFAV[1]:\t" << SFAV[1] << "\t" << "SFAV[2]:\t" << SFAV[2] << "\t" << "SFAV[3]:\t" << SFAV[3] << "\n";
-//        cout << ns_stencil[2].rho() << "\t"
 //        system("pause");
 	}
     else{ //near boundaries assume AV=0
@@ -44,11 +43,26 @@ vector<double> Residuals(grid &grd,  vector< vector<cellState> > &cellset, int i
     EFAV = EastFlux_AV(grd, ew_stencil) ;
     WFAV = WestFlux_AV(grd, ew_stencil);
 
+    EFAV = EastFlux(grd, ew_stencil) ;
+    WFAV = WestFlux(grd, ew_stencil);
+
     RESIDUALS[0] = NFAV[0] - SFAV[0] + EFAV[0] - WFAV[0];
     RESIDUALS[1] = NFAV[1] - SFAV[1] + EFAV[1] - WFAV[1];
     RESIDUALS[2] = NFAV[2] - SFAV[2] + EFAV[2] - WFAV[2];
     RESIDUALS[3] = NFAV[3] - SFAV[3] + EFAV[3] - WFAV[3];
 
+//    if(j==0){
+//        cout << "OuterFlux:\t i = " << i << "\n";
+//        //cout << "SFAV[0]:\t" << SFAV[0] << "\t" << "SFAV[1]:\t" << SFAV[1] << "\t" << "SFAV[2]:\t" << SFAV[2] << "\t" << "SFAV[3]:\t" << SFAV[3] << "\n";
+//        for(int k=0; k<4; k++){
+//            cout << "NFAV[" << k << "]:\t" << NFAV[k] << "\t";
+//            cout << "SFAV[" << k << "]:\t" << SFAV[k] << "\t";
+//            cout << "WFAV[" << k << "]:\t" << WFAV[k] << "\t";
+//            cout << "EFAV[" << k << "]:\t" << EFAV[k] << "\n";
+//            cout <<"RESIDUAL[" << k << "]:\t"<<RESIDUALS[k]<<"\n\n";
+//        }
+//        system("pause");
+//    }
 	return RESIDUALS;
 }
 
@@ -58,7 +72,7 @@ double Tau(grid &grd, cellState cell, double CFL){
     double denominatorI = (cell.U()+cell.C())*grd.xInorm[i][j] + (cell.V()+cell.C())*grd.yInorm[i][j]; //Yikes, Inorm isn't calculated for 127??
     double denominatorJ = (cell.U()+cell.C())*grd.xJnorm[i][j] + (cell.V()+cell.C())*grd.yJnorm[i][j];
 
-	double TAU = CFL*grd.area[i][j] / (abs(denominatorI) + abs(denominatorJ));
+	double TAU = CFL / (abs(denominatorI) + abs(denominatorJ));
 
 	return TAU;
 }
@@ -76,7 +90,7 @@ vector<double> AlphaRK(){
 }
 
 //Define AlphaRK, Define Tau, Is there a way to do what I am trying to do with TempCell = CellSet?
-vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset, double CFL){
+void RK4(grid &grd, vector< vector<cellState> > &cellset, double CFL){
 
     std::vector<double> U_temp(4, 0.0);
     std::vector<double> RESIDUALS(4, 0.0);
@@ -88,7 +102,7 @@ vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset,
     //loop through the whole thing 4 times! Nk*Ni*Nj, this way each pseudo timestep residual (R1,R2, etc) is based on fluxes from neighbors on that pseudotime. Otherwise there is the inclusion of fluxes that are old since Fstar is 1/2(fi + fi+1).
     for (int k = 0; k<4; k++) {
         cellsetPrev = cellsetPlus;
-            for(int j=0; j<grd.M-1; j++) { // not sure why i was looped first.
+            for(int j=0; j<grd.M-1; j++) {
 				for (int i = 0; i<grd.N - 1; i++) {
 				RESIDUALS = Residuals(grd, cellsetPrev, i, j);
 
@@ -103,7 +117,30 @@ vector< vector<cellState> > RK4(grid &grd, vector< vector<cellState> > &cellset,
             }
         }
     }
-    return cellsetPlus;
+    cellset=cellsetPlus;
+    //return cellsetPlus;
+}
+void singleStepIntegration(grid &grd, vector< vector<cellState> > &cellset, double CFL){
+    //debug tool to make sure rk-4 is working
+    vector<vector<cellState> > tempfield = cellset;
+    vector<double> U_temp(4, 0.0);
+    vector<double> RESIDUALS(4, 0.0);
+    vector<double> alphaRK = AlphaRK();
+	double TauVal;
+
+    //loop through the whole thing 4 times! Nk*Ni*Nj, this way each pseudo timestep residual (R1,R2, etc) is based on fluxes from neighbors on that pseudotime. Otherwise there is the inclusion of fluxes that are old since Fstar is 1/2(fi + fi+1).
+    for(int j=0; j<grd.M-1; j++) {
+        for (int i = 0; i<grd.N - 1; i++) {
+            RESIDUALS = Residuals(grd, cellset, i, j);
+            TauVal = Tau(grd, cellset[i][j], CFL);
+            //cout <<TauVal<<endl;
+            tempfield[i][j].rhois(cellset[i][j].rho() - TauVal * RESIDUALS[0]);
+            tempfield[i][j].rhoUis(cellset[i][j].rhoU() - TauVal * RESIDUALS[1]);
+            tempfield[i][j].rhoVis(cellset[i][j].rhoV() - TauVal * RESIDUALS[2]);
+            tempfield[i][j].rhoEis(cellset[i][j].rhoE() - TauVal * RESIDUALS[3]);
+        }
+    }
+    cellset=tempfield;
 }
 
 vector<cellState> stencilEW(grid & grd, vector< vector<cellState> > & cellset, int i, int j){

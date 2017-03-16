@@ -140,6 +140,12 @@ class cellState{
         }
         int i(){return xi;}
         int j(){return eta;}
+        void iIs(int i){
+            xi=i;
+        }
+        void jIs(int j){
+            eta=j;
+        }
         bool isValid(){return valid;}
         //grid based functions
 };

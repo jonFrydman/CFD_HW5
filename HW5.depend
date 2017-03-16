@@ -35,10 +35,10 @@
 1489261754 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\referenceparameters.h
 	<math.h>
 
-1489537014 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\cellstate.h
+1489690174 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\cellstate.h
 	<math.h>
 
-1489636458 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\grid.h
+1489698320 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\grid.h
 	<fstream>
 	<string>
 	<cstdlib>
@@ -56,7 +56,7 @@
 	"grid.h"
 	<vector>
 
-1489609864 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\numericalflux.h
+1489692484 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\numericalflux.h
 	"cellState.h"
 	"grid.h"
 	"eulerFlux.h"
@@ -69,12 +69,12 @@
 	<cmath>
 	<numericalFlux.h>
 
-1489523946 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\eulerflux.h
+1489676230 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\eulerflux.h
 	"cellState.h"
 	"grid.h"
 	<vector>
 
-1489541632 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\referenceparameters.h
+1489676230 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\referenceparameters.h
 	<math.h>
 
 1489276660 source:h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\eulerflux.cpp
@@ -84,7 +84,7 @@
 	<iostream>
 	"eulerFlux.h"
 
-1489609864 source:h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\src\eulerflux.cpp
+1489680996 source:h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\src\eulerflux.cpp
 	"cellState.h"
 	"grid.h"
 	<vector>
@@ -148,7 +148,7 @@
 	"numericalFlux.h"
 	"eulerFlux.h"
 
-1489634708 source:h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\src\integration.cpp
+1489699934 source:h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\src\integration.cpp
 	"integration.h"
 	"cellState.h"
 	"grid.h"
@@ -156,23 +156,25 @@
 	<cmath>
 	<numericalFlux.h>
 
-1489537014 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\integration.h
+1489696830 h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\include\integration.h
 	<vector>
 	"grid.h"
 	"cellState.h"
 	"numericalFlux.h"
 	"eulerFlux.h"
 
-1489634630 source:h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\src\numericalflux.cpp
+1489699748 source:h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\src\numericalflux.cpp
 	"cellState.h"
 	"grid.h"
 	<vector>
 	<cmath>
 	<numericalFlux.h>
+	"eulerFlux.h"
 
-1489635776 source:h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\src\sandbox.cpp
+1489700042 source:h:\uw winter 17\aa_543_computational_fluid_dynamics\hw5\src\sandbox.cpp
 	<iostream>
 	<fstream>
+	<sstream>
 	"referenceParameters.h"
 	"integration.h"
 	"eulerFlux.h"

@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <numericalFlux.h>
+#include "eulerFlux.h"
 
 using namespace std;
 
@@ -144,19 +145,50 @@ vector<double> SouthFlux_AV(grid &grd,  vector<cellState> &stencil){
     return FluxAV;
 }
 
-vector<double> AirfoilFlux(grid & grd, vector< vector<cellState> > cellset, int i) {
-
+vector<double> AirfoilFlux(grid & grd, vector< vector<cellState> > &cellset, int i) {
 	vector<double> FoilFlux(4, 0.0);
+    vector<double> FSTAR(4,0.0);
+    vector<double> GSTAR(4,0.0);
+	cellState foil=cellset[i][0];
+	double gamma=foil.gamma();
+	double Pb = 3.0 / 2 * cellset[i][0].P() - 1.0 / 2 * cellset[i][1].P();// Linear extrapolation of pressure. See p 21 of stanford
+    //Pb = cellset[i][0].P();//zeroth order approximation in space and time
+    double rho=cellset[i][0].rho()*pow(cellset[i][0].P()/Pb, 1/gamma); //isentropic density change within cell
 
-	double Pboundary;
+    double ubtang=foil.U()*grd.ySnorm[i][0] - foil.V()*grd.xSnorm[i][0];
+    double ubx=ubtang*grd.ySnorm[i][0];
+    double uby=ubtang*grd.xSnorm[i][0];
 
-	Pboundary = 3.0 / 2 * cellset[i][0].P() - 1.0 / 2 * cellset[i][1].P();// Linear extrapolation of pressure. See p 21 of stanford
+    FSTAR[0]= rho*ubx;
+    FSTAR[1]= rho*pow(ubx,2)+Pb;
+    FSTAR[2]= rho*ubx*uby;
+    FSTAR[3]= ubx*(Pb*gamma/(gamma-1)+rho*(pow(ubx,2)+ pow(uby, 2))/2);
 
-	FoilFlux[0] = 0;
-	FoilFlux[1] = Pboundary*grd.xSnorm[i][0];
-	FoilFlux[2] = Pboundary*grd.ySnorm[i][0];
-	FoilFlux[3] = 0;
+    GSTAR[0]= rho*uby;
+    GSTAR[1]= rho*ubx*uby;
+    GSTAR[2]= rho*pow(uby,2)+Pb;
+	GSTAR[3]= uby*(Pb*gamma / (gamma - 1) + rho*(pow(ubx, 2) + pow(uby, 2)) / 2);
 
+    FoilFlux[0]=FSTAR[0]*grd.xSdeltas[i][0]+GSTAR[0]*grd.ySdeltas[i][0];
+    FoilFlux[1]=FSTAR[1]*grd.xSdeltas[i][0]+GSTAR[1]*grd.ySdeltas[i][0];
+    FoilFlux[2]=FSTAR[2]*grd.xSdeltas[i][0]+GSTAR[2]*grd.ySdeltas[i][0];
+    FoilFlux[3]=FSTAR[3]*grd.xSdeltas[i][0]+GSTAR[3]*grd.ySdeltas[i][0];
+
+//    FoilFlux[0] = foil.F1()*grd.xSdeltas[i][0] + foil.G1()*grd.ySdeltas[i][0];
+//    FoilFlux[1] = foil.F2()*grd.xSdeltas[i][0] + foil.G2()*grd.ySdeltas[i][0];
+//    FoilFlux[2] = foil.F3()*grd.xSdeltas[i][0] + foil.G3()*grd.ySdeltas[i][0];
+//    FoilFlux[3] = foil.F4()*grd.xSdeltas[i][0] + foil.G4()*grd.ySdeltas[i][0]; // THese should definitely be delta S's
+
+//	FoilFlux[0] = 0;
+//	FoilFlux[1] = Pboundary*grd.xSnorm[i][0];
+//	FoilFlux[2] = Pboundary*grd.ySnorm[i][0];
+//	FoilFlux[3] = 0;
+
+//    vector<double> test(4,0.0);
+//    test[0]=ubx;
+//    test[1]=uby;
+//    test[2]=ubtang;
+//    test[3]=Pb;
 	return FoilFlux;
 }
 
@@ -166,6 +198,11 @@ vector<double> InletOutletFlux(grid &grd,  vector< vector<cellState> > &cellset,
     double rho_ref=1.293; // Kg/m^3
     double P_ref=101325;// Pa
     double c_ref=sqrt(1.4*P_ref/rho_ref);
+    double R=8314./28.966; // air gas constant J/Kg-K
+    double cp=1005.; // J/Kg-K
+    double cv=cp-R;
+    double gamma=cp/cv;
+    double rhoE_ref=P_ref/(gamma-1)+0.5*rho_ref*pow(M_ref*c_ref,2); //internal energy KJ/m^3,
 
     double Rplus, Rminus, ubnorm,ubtang, ubx, uby, ceebee, rho, P;
     vector<double> FSTAR(4,0.0);
@@ -175,51 +212,68 @@ vector<double> InletOutletFlux(grid &grd,  vector< vector<cellState> > &cellset,
 
     int ctrlast=grd.M-2; // Last is actually M-2, unless we give cellset a ghost cell
 	int normlast = grd.M - 1; // The normal on the boundary is what matters here
-    double gamma=cellset[i][ctrlast].gamma();
+
     double normal_speed=cellset[i][ctrlast].U()*grd.xSnorm[i][normlast] + cellset[i][ctrlast].V()*grd.ySnorm[i][normlast];
 
     if(normal_speed < 0){ //inlet
-        Rplus= M_ref*c_ref*grd.xSnorm[i][normlast]	 +2*cellset[i][ctrlast].C()/(gamma-1);
-        Rminus= cellset[i][ctrlast].U()*grd.xSnorm[i][normlast]+ cellset[i][ctrlast].V()*grd.ySnorm[i][normlast]-2*cellset[i][ctrlast].C()/(gamma-1); //physical inlet velcity dotted with the normal vector
-        ubnorm=(Rplus+Rminus)/2; //normal component of velocity
-        ubtang=cellset[i][ctrlast].U()*grd.ySnorm[i][normlast]-cellset[i][ctrlast].V()*grd.xSnorm[i][normlast]; //tangential component. Geometry looks good.
-        ubx = (ubnorm-ubtang)*grd.xSnorm[i][normlast]; //check geometrically
-        uby = (ubnorm+ubtang)*grd.ySnorm[i][normlast]; //check geometrically
-		ceebee = (Rplus - Rminus)*(gamma - 1) / 4;
+//        Rplus= M_ref*c_ref*grd.xSnorm[i][normlast]	 +2*cellset[i][ctrlast].C()/(gamma-1);
+//        Rminus= cellset[i][ctrlast].U()*grd.xSnorm[i][normlast]+ cellset[i][ctrlast].V()*grd.ySnorm[i][normlast]-2*cellset[i][ctrlast].C()/(gamma-1); //physical inlet velcity dotted with the normal vector
+//        ubnorm=(Rplus+Rminus)/2; //normal component of velocity
+//        ubtang=cellset[i][ctrlast].U()*grd.ySnorm[i][normlast]-cellset[i][ctrlast].V()*grd.xSnorm[i][normlast]; //tangential component. Geometry looks good.
+//        ubx = (ubnorm-ubtang)*grd.xSnorm[i][normlast]; //check geometrically
+//        uby = (ubnorm+ubtang)*grd.ySnorm[i][normlast]; //check geometrically
+//        ceebee = (Rplus - Rminus)*(gamma - 1) / 4;
+		P=P_ref;
+		ubx=M_ref*c_ref;
+		uby=0;
 
-		rho = pow(pow(ceebee, 2)*pow(rho_ref, gamma) / (gamma*P_ref), gamma - 1);
-		P = pow(ceebee, 2)*rho / gamma;
-
-
+//        cellState freestream=cellState(rho_ref, rho_ref*M_ref*c_ref, 0, rhoE_ref, gamma, cv, i,-1);
+//        vector<cellState> stencil(6);
+//        stencil[3]=freestream;
+//        stencil[2]=cellset[i][normlast];
+//        return GenericFlux(grd, stencil);
     }
     else{//outlet
         Rminus=normal_speed+2*cellset[i][ctrlast].C()/(gamma-1);
-        Rplus=M_ref*c_ref*grd.xSnorm[i][normlast]; //physical outlet velcity dotted with the normal vector (out outlet velocity is only in the x-driection)
+        Rplus= M_ref*c_ref*grd.xSnorm[i][normlast]+2*c_ref/(gamma-1); //physical outlet velcity dotted with the normal vector (out outlet velocity is only in the x-driection)
         ubnorm=(Rplus+Rminus)/2; //normal component of velocity
         ubtang=cellset[i][ctrlast].U()*grd.ySnorm[i][normlast]-cellset[i][ctrlast].V()*grd.xSnorm[i][normlast]; //tangential component. Geometry looks good.
         ubx = (ubnorm-ubtang)*grd.xSnorm[i][normlast];
         uby = (ubnorm+ubtang)*grd.ySnorm[i][normlast];
         ubx=M_ref*c_ref; //X-speed is at the mach speed, ignoring ferrante's wild notions of consistant tangential velocity
         uby=0;
-
-		ceebee = (Rplus - Rminus)*(gamma - 1) / 4;
-
-		rho = pow(pow(ceebee, 2)*pow(rho_ref, gamma) / (gamma*P_ref), gamma - 1);
-		P = pow(ceebee, 2)*rho / gamma;
+        ceebee = (Rminus - Rplus)*(gamma - 1) / 4;
     }
+
+    rho = pow(pow(ceebee, 2)*pow(rho_ref, gamma) / (gamma*P_ref), gamma - 1);
+    P = pow(ceebee, 2)*rho / gamma;
+    P=P_ref;
+    rho=rho_ref;
+
     FSTAR[0]= rho*ubx;
     FSTAR[1]= rho*pow(ubx,2)+P;
     FSTAR[2]= rho*ubx*uby;
-    FSTAR[3]= P*gamma/(gamma-1)+rho*(pow(ubx,2)+ pow(uby, 2))/2;
+    FSTAR[3]= ubx*(P*gamma/(gamma-1)+rho*(pow(ubx,2)+ pow(uby, 2))/2);
 
     GSTAR[0]= rho*uby;
     GSTAR[1]= rho*ubx*uby;
     GSTAR[2]= rho*pow(uby,2)+P;
-	GSTAR[3] = P*gamma / (gamma - 1) + rho*(pow(ubx, 2) + pow(uby, 2)) / 2;
+	GSTAR[3]= uby*(P*gamma / (gamma - 1) + rho*(pow(ubx, 2) + pow(uby, 2)) / 2);
 
     netFlux[0]=FSTAR[0]*grd.xSdeltas[i][normlast]+GSTAR[0]*grd.ySdeltas[i][normlast];
     netFlux[1]=FSTAR[1]*grd.xSdeltas[i][normlast]+GSTAR[1]*grd.ySdeltas[i][normlast];
     netFlux[2]=FSTAR[2]*grd.xSdeltas[i][normlast]+GSTAR[2]*grd.ySdeltas[i][normlast];
     netFlux[3]=FSTAR[3]*grd.xSdeltas[i][normlast]+GSTAR[3]*grd.ySdeltas[i][normlast];
-    return netFlux; //Placeholder for now
+
+//    vector<double> test(4,0.0);
+//    test[0]=FSTAR[0]*grd.xSnorm[i][normlast]+GSTAR[0]*grd.ySnorm[i][normlast];
+//    test[1]=FSTAR[1]*grd.xSnorm[i][normlast]+GSTAR[1]*grd.ySnorm[i][normlast];
+//    test[2]=FSTAR[2]*grd.xSnorm[i][normlast]+GSTAR[2]*grd.ySnorm[i][normlast];
+//    test[3]=FSTAR[3]*grd.xSnorm[i][normlast]+GSTAR[3]*grd.ySnorm[i][normlast];
+//    test[0]=(normal_speed/abs(normal_speed))*sqrt(ubx*ubx+uby*uby);
+//    test[1]=ceebee;
+//    test[2]=P;
+//    test[3]=(P/rho*gamma / (gamma - 1) + (pow(ubx, 2) + pow(uby, 2)) / 2);
+
+    return netFlux;
 }
