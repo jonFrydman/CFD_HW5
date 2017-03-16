@@ -70,7 +70,7 @@ void writeSolutionStep(int t){
 	if(!fout.good()){
         cout << "ERROR OPENING SOLUTION FILE\n";
 	}
-
+	/*
     fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\", \"Yvel\", \"F0\", \"G0\", \"rho\" \n";
     fout << "ZONE T = \"CELL CENTERS AT TIMESTEP " << t << " \", I = " << grd.N - 1 << " , J = " << grd.M - 1 << ", F=POINT \n\n";
     for (int i = 0; i < grd.N - 1; i++) {
@@ -80,6 +80,20 @@ void writeSolutionStep(int t){
             fout << cellset[i][j].F1() << ' ' << cellset[i][j].G1() << ' ' << cellset[i][j].rho() << endl;
         }
     }
+
+	fout << endl << "TEXT X = " << grd.N - 1 << ", Y = " << grd.M - 1 << ", T = \"Timestep = " << t << " \", F = COURIER, CS = FRAME, H = 2, ZN = " << t << endl << endl;
+	*/
+
+	fout << "VARIABLES = \"X\", \"Y\", \"xSds\", \"ySds\", \"xSnorm\",\"ySnorm\", \"ySds\", \"xSnorm\",\"ySnorm\" \n";
+	fout << "ZONE T = \"Grid normals \", I = " << grd.N - 1 << " , J = " << grd.M - 1 << ", F=POINT \n\n";
+	for (int i = 0; i < grd.N - 1; i++) {
+		for (int j = 0; j < grd.M - 1; j++) {
+			fout << grd.xCenter[i][j] << ' ' << grd.yCenter[i][j] << ' ' << grd.xSdeltas[i][j] << ' ' << grd.ySdeltas[i][j] << ' ' << grd.xSnorm[i][j] << ' ';
+			fout << grd.ySnorm[i][j] << ' ' << grd.xWdeltas[i][j] << ' ' << grd.yWdeltas[i][j] << ' ' << grd.xWnorm[i][j] << ' ';
+			fout << grd.xWnorm[i][j] << endl;
+		}
+	}
+
 //		for (int j = 0; j < grd.M - 1; j++) {
 //            fout << grd.xCenter[0][j] << ' ' << grd.yCenter[0][j] << ' ' << cellset[0][j].speed() << ' ' << cellset[0][j].P() << ' ' << cellset[0][j].M() << ' ';
 //            fout << cellset[0][j].H() << ' ' << cellset[0][j].S() << ' ' << cellset[0][j].U() << std::endl;
