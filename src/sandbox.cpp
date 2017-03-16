@@ -27,8 +27,8 @@ int main(){
 	//cout << "Please make the console full screen"<<endl;
 	//system("pause");
 
-    for (int t=0 ; t<2; t++){
-        
+    for (int t=0 ; t<50; t++){
+
 		cout << "Time Step:\t"<<t<<"\n";
 		writeSolutionStep(t);
         cellset = RK4(grd, cellset, CFL);
@@ -59,7 +59,7 @@ void writeGrid(){
 	fout.close();
 
 	fout.open("GridCenters.dat");
-	fout << "VARIABLES = \"Xctr\", \"Yctr\", \"xSds\", \"ySds\", \"xSnorm\",\"ySnorm\","; 
+	fout << "VARIABLES = \"Xctr\", \"Yctr\", \"xSds\", \"ySds\", \"xSnorm\",\"ySnorm\",";
 	fout <<" \"xWds\", \"yWds\",\"xWnorm\", \"yWnorm\", \"xInorm\", \"yInorm\", \"xJnorm\", \"yJnorm\" \n";
 	fout << "ZONE T = \"Grid center vals" << " \", I = " << grd.N << " , J = " << grd.M - 1 << ", F=POINT \n\n";
 	for (int j = 0; j < grd.M - 1; j++) {
@@ -89,7 +89,7 @@ void writeGrid(){
 		fout << grd.ySnorm[0][j] << endl;
 
 	}
-	
+
 	fout.close();
 
 }
@@ -110,7 +110,7 @@ void writeSolutionStep(int t){
 	fout << "VARIABLES = \"X\", \"Y\", \"Speed\", \"P\", \"M\",\"H\", \"S\", \"Xvel\", \"Yvel\",";
 	fout << "\"F0\", \"G0\", \"rho\", \"RES0\", \"RES1\", \"RES2\", \"RES3\" \n";
 	fout << "ZONE T = \"CELL CENTERS AT TIMESTEP " << t << " \", I = " << grd.N << " , J = " << grd.M - 1 << ", F=POINT \n\n";
-	
+
 	vector<double> residual;
 
 	for (int j = 0; j < grd.M - 1; j++) {
