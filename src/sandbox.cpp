@@ -28,8 +28,8 @@ int main(){
 
 	//cout << "Please make the console full screen"<<endl;
 	//system("pause");
-    int writemodulo=1;//write solution every # of time steps.
-    int tmax=5;
+    int writemodulo=5;//write solution every # of time steps.
+    int tmax=15;
     for (int t=0 ; t<=tmax; t++){
 		cout << "Time Step:\t"<<t<<"\n";
 		//significantly speed up code by not writing every timestep (writing is slow)

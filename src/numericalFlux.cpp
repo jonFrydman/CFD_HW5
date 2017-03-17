@@ -160,13 +160,13 @@ vector<double> AirfoilFlux(grid & grd, vector< vector<cellState> > &cellset, int
     double uby=ubtang*grd.xSnorm[i][0];
 
 	FSTAR[0] = 0;
-	FSTAR[1] = Pb*grd.xSnorm[i][0];
+	FSTAR[1] = Pb;
 	FSTAR[2] = 0;
 	FSTAR[3] = 0;
 
 	GSTAR[0] = 0;
 	GSTAR[1] = 0;
-	GSTAR[2] = Pb*grd.ySnorm[i][0];
+	GSTAR[2] = Pb;
 	GSTAR[3] = 0;
 
 /* Removed to try the simple pressure normal flux

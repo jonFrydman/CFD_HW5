@@ -91,7 +91,7 @@
 	<iostream>
 	"eulerFlux.h"
 
-1489705750 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\eulerflux.cpp
+1489713587 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\eulerflux.cpp
 	"cellState.h"
 	"grid.h"
 	<vector>
@@ -115,12 +115,13 @@
 	"grid.h"
 	<vector>
 
-1489673203 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\numericalflux.cpp
+1489713735 source:c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\src\numericalflux.cpp
 	"cellState.h"
 	"grid.h"
 	<vector>
 	<cmath>
 	<numericalFlux.h>
+	"eulerFlux.h"
 
 1489701646 c:\users\mike\google drive\term 5\cfd\hw 5\cfd_hw5\include\numericalflux.h
 	"cellState.h"
